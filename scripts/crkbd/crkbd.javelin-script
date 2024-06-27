@@ -656,8 +656,8 @@ const NAV_MASK = 8;
 const NUMPAD_MASK = 16;
 const TEMPORARY_QWERTY_MASK = 32;
 
-// var layer = STENO_MASK; // default
-var layer = ALPHABETIC_LAYER;
+var layer = STENO_MASK; // default
+// var layer = ALPHABETIC_LAYER;
 var pressCount = 0;
 var speed = 1;
 var hueSpread = 4;
@@ -1120,7 +1120,7 @@ func init() {
 
   updateAllButtonColors();
 
-  setLayer(ALPHABETIC_LAYER);
+  setLayer(layer);
   updateScreenContrast();
 
   updateBoardPower();
@@ -2389,9 +2389,56 @@ func update24() {
 }
 func onPress24() {
   handlePress(24, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+
+  if (isInPressAll()) {
+    update24();
+    return;
+  }
+
+  wasSteno24 = layer == STENO_MASK;
+  wasShiftPressed24 = (layer == ALPHABETIC_LAYER || (layer & TEMPORARY_QWERTY_MASK));
+
+  if (ENABLE_BLE_TRANSMIT_POWER_CONTROLS && isSettingsLayer()) {
+    updateBleTransmitPower(bleTransmitPower > 0 ? bleTransmitPower - 1 : 0);
+    return;
+  }
+
+  if (wasSteno24) {
+    setLayer(layer ^ STENO_MASK);
+    pressCount24 = pressCount;
+    pressAll();
+  } else {
+    if (wasShiftPressed24) {
+      press(SC_L_SHIFT);
+    }
+    pressCount24 = pressCount;
+  }
+  timer24 = getTime();
+
+  handleWordCapsAndCapsLock();
 }
 func onRelease24() {
   handleRelease(24, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+
+  if (wasShiftPressed24) {
+    release(SC_L_SHIFT);
+  }
+
+  if (wasSteno24) {
+    // If the keypress was in steno mode, and other keys were pressed, or it
+    // was a long press, drop immediately back to steno mode, and drop all masks.
+    if (pressCount24 != pressCount || layer || getTime() - timer24 >= TAP_THRESHOLD) {
+      setLayer(STENO_MASK);
+    }
+  } else if (layer == 0 && pressCount24 == pressCount
+      && getTime() - timer24 < TAP_THRESHOLD
+      && checkButtonState("000000000000000000000000000000000000000000")) {
+    // A tap of the key turns on steno mode.
+    // Automatically turn off word caps when entering steno mode.
+
+    setLayer(STENO_MASK);
+  }
+  updateUnderglowRgb();
 }
 
 func onPress25() {

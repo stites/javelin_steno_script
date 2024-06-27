@@ -19,7 +19,31 @@
 //   releasing it. This will also give access to the Symbols, Navigation and Function layers by
 //   pressing those keys on the Alphabetic layer.
 // * Command and Control activate a temporary qwerty layer
-
+//
+// (TODO) Sam's Simple Steno
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |        |  #1  |   T  |   P  |   H  |  *1  |        |   F  |   P  |   L  |   T  |   D  |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |  S1  |   K  |   W  |   R  |  *3  |        |   R  |   B  |   G  |   S  |   Z  |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// | Alpha  |      |      |      |      |      |        |      |      |      |      |      |        |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           |  A   |  0   |      |  |   E  |   U  |      |
+//                           `--------------------'  `--------------------'
+//
+// (TODO) Sam's Full Steno
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |   Tab  |  #1  |   T  |   P  |   H  |  *1  |        |   F  |   P  |   L  |   T  |   D  |  Bksp  |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |Ctrl/Esc|  S1  |   K  |   W  |   R  |  *3  |        |   R  |   B  |   G  |   S  |   Z  |  '  "  |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// | Alpha  |  X3  |  X4  |  X5  |  X6  |  X7  |        |  X8  |  X9  |  X10 |  X11 |  X12 | RShift |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           |  A   |  0   |  X1  |  |   E  |   U  |  X2  |
+//                           `--------------------'  `--------------------'
+//
 // Alphabetic QWERTY
 //
 // ,-------------------------------------------.        ,-------------------------------------------.
@@ -68,6 +92,31 @@
 //                           | Meta |  Alt |Nav/Sp|  | Space| Sym  |Fn/Ent|
 //                           `--------------------'  `--------------------'
 //
+// Alphabetic Colemak-DH
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |   Tab  |   Q  |   W  |   F  |   P  |   B  |        |   J  |   L  |   U  |   Y  | ;  : |  Bksp  |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |Ctrl/Esc|   A  |   R  |   S  |   T  |   G  |        |   M  |   N  |   E  |   I  |   O  |  '  "  |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |Shf/Sten|   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? | RShift |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           | Meta |  Alt |Nav/Sp|  | Space| Sym  |Fn/Ent|
+//                           `--------------------'  `--------------------'
+//
+// Alphabetic Sam's Colemak-DH
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |        |   Q  |   W  |   F  |   P  |   B  |        |   J  |   L  |   U  |   Y  | ;  : |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |   A  |   R  |   S  |   T  |   G  |        |   M  |   N  |   E  |   I  |   O  |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |TODOSten|   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? |        |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//    tap + (TODO) tap-hold  | Esc  |  Ret | Tab  |  | Space| Bspc | Del  |
+//                           |  \   |   \  |  \   |  |      |      |  \   |
+//    (TODO) Mod-tap layer:  | Media|  Num | Fun  |  |      |      | Nav  |
+//                           `--------------------'  `--------------------'
 //
 // The layout is selected by pressing LAYOUT on the Settings layer to rotate through the options.
 // This can be permanently changed by changing the alphabeticLayout variable's initial value.
@@ -99,8 +148,20 @@
 //   - Following a '{' or '[', it means enter (newline)
 //   - Following a digit, it means ','
 //   - Following a comma or dot, it means space ' '
-
 //
+// (TODO) Sam's Symbols
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |        |  1   |  2   |  3   |  4   |  5   |        |   6  |  7   |  8   |  9   |  0   |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        | LGUI | LALT | LCTRL| LSHFT| TAB  |        | BSPC | RHSFT|  [   |  ]   |  `   |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |  \   |  `   |  [   |  ]   | RET  |        |  SPC |  '   |  -   |  =   |  \   |  Magic |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           |      |      |      |  | RET  | BSPC | DEL  |
+//                           `--------------------'  `--------------------'
+//
+
 // Function
 //
 // ,-------------------------------------------.        ,-------------------------------------------.
@@ -112,6 +173,18 @@
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
 //                           |      |      |      |  |      |      |      |
 //                           `--------------------'  `--------------------'
+// (TODO) Sam's Functions
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |        |  F1  | F2   | F3   | F4   |  F5  |        |  F6  |  F7  |  F8  |  F9  | F10  |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |  F11 | F12  | F13  | F14  | F15  |        | F16  | F17  | F18  | F19  | F20  |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |      |      |      |      |      |        |      |      |      |      |      |        |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           |      |      |      |  |      |      |      |
+//                           `--------------------'  `--------------------'
+
 
 //
 // Navigation/Media
@@ -126,6 +199,19 @@
 //                           |      |Numpad|      |  | Space|      | Enter|
 //                           `--------------------'  `--------------------'
 //
+// (TODO) Sam's (New) Navigation/Media
+//
+// ,-------------------------------------------.        ,-------------------------------------------.
+// |        |      |      |      | PScrn|      |        | Mute | Bri- | Vol- | Vol+ | Bri+ |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |      |      |      |      |      |        |      |  ←   |   ↓  |   ↑  |  →   |        |
+// |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
+// |        |      |      |      |      |      |        |      | Home | PgDn | PgUp | End  |        |
+// `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
+//                           |      |      |      |  |      |      |      |
+//                           `--------------------'  `--------------------'
+//
+
 
 //
 // Numpad -- Pressing Alt + Nav at the same time
@@ -570,7 +656,8 @@ const NAV_MASK = 8;
 const NUMPAD_MASK = 16;
 const TEMPORARY_QWERTY_MASK = 32;
 
-var layer = STENO_MASK;
+// var layer = STENO_MASK; // default
+var layer = ALPHABETIC_LAYER;
 var pressCount = 0;
 var speed = 1;
 var hueSpread = 4;
@@ -649,55 +736,56 @@ const ALPHABETIC_LAYOUT_DVORAK = 1;
 const ALPHABETIC_LAYOUT_COLEMAK = 2;
 const ALPHABETIC_LAYOUT_WORKMAN = 3;
 const ALPHABETIC_LAYOUT_COLEMAK_DH = 4;
+const ALPHABETIC_LAYOUT_COLEMAK_DH_SAM = 5;
 
-const ALPHABETIC_LAYOUT_COUNT = 5;
+const ALPHABETIC_LAYOUT_COUNT = 6;
 
 // Change this line to set the default layout on startup.
-var alphabeticLayout = ALPHABETIC_LAYOUT_QWERTY;
+var alphabeticLayout = ALPHABETIC_LAYOUT_COLEMAK_DH_SAM;
 
 const buttonScanCodes = [[
-  2b 2b 2b 2b 2b  // Button 0: Tab
-  14 34 14 14 14  // Button 1: Q, Apos, Q, Q, Q
-  1a 36 1a 07 1a  // Button 2: W, Comma, W, D, W
-  08 37 09 15 09  // Button 3: E, Period, F, R, F
-  15 13 13 1a 13  // Button 4: R, P, P, W, P
-  17 1c 0a 05 05  // Button 5: T, Y, G, B, B
-  1c 09 0d 0d 0d  // Button 6: Y, F, J, J, J
-  18 0a 0f 09 0f  // Button 7: U, G, L, F, L
-  0c 06 18 18 18  // Button 8: I, C, U, U, U
-  12 15 1c 13 1c  // Button 9: O, R, Y, P, Y
-  13 0f 33 33 33  // Button 10: P, L, Semicolon, Semicolon, Semicolon
-  2a 2a 2a 2a 2a  // Button 11: Backspace
-  e0 e0 e0 e0 e0  // Button 12: Ctrl
-  04 04 04 04 04  // Button 13: A
-  16 12 15 16 15  // Button 14: S, O, R, S, R
-  07 08 16 0b 16  // Button 15: D, E, S, H, S
-  09 18 17 17 17  // Button 16: F, U, T, T, T
-  0a 0c 07 0a 0a  // Button 17: G, I, D, G, G
-  0b 07 0b 1c 10  // Button 18: H, D, H, Y, M
-  0d 0b 11 11 11  // Button 19: J, H, N, N, N
-  0e 17 08 08 08  // Button 20: K, T, E, E, E
-  0f 11 0c 12 0c  // Button 21: L, N, I, O, I
-  33 16 12 0c 12  // Button 22: Semicolon, S, O, I, O
-  34 2d 34 34 34  // Button 23: Apos, Minus, Apos, Apos, Apos
-  00 00 00 00 00  // Button 24: <Special cased shift/steno>
-  1d 33 1d 1d 1d  // Button 25: Z, Semicolon, Z, Z, Z
-  1b 14 1b 1b 1b  // Button 26: X, Q, X, X, X
-  06 0d 06 10 06  // Button 27: C, J, C, M, C
-  19 0e 19 06 07  // Button 28: V, K, V, C, D
-  05 1b 05 19 19  // Button 29: B, X, B, V, V
-  11 05 0e 0e 0e  // Button 30: N, B, K, K, K
-  10 10 10 0f 0b  // Button 31: M, M, M, L, H
-  36 1a 36 36 36  // Button 32: Comma, W, Comma, Comma, Comma
-  37 19 37 37 37  // Button 33: Period, V, Period, Period, Period
-  38 1d 38 38 38  // Button 34: Slash, Z, Slash, Slash, Slash
-  e5 e5 e5 e5 e5  // Button 35: Right Shift
-  e3 e3 e3 e3 e3  // Button 36: Meta (Command, Windows)
-  e2 e2 e2 e2 e2  // Button 37: Alt
-  00 00 00 00 00  // Button 38: <Special case navigation/space>
-  2c 2c 2c 2c 2c  // Button 39: Space
-  00 00 00 00 00  // Button 40: <Special case Symbol>
-  00 00 00 00 00  // Button 41: <Special case Function/Enter>
+  2b 2b 2b 2b 2b 00  // Button 0: Tab,                , <empty>
+  14 34 14 14 14 14  // Button 1: Q, Apos, Q, Q, Q, Q
+  1a 36 1a 07 1a 1a  // Button 2: W, Comma, W, D, W, W
+  08 37 09 15 09 09  // Button 3: E, Period, F, R, F, F
+  15 13 13 1a 13 13  // Button 4: R, P, P, W, P, P
+  17 1c 0a 05 05 05  // Button 5: T, Y, G, B, B, B
+  1c 09 0d 0d 0d 0d  // Button 6: Y, F, J, J, J, J
+  18 0a 0f 09 0f 0f  // Button 7: U, G, L, F, L, L
+  0c 06 18 18 18 18  // Button 8: I, C, U, U, U, U
+  12 15 1c 13 1c 1c  // Button 9: O, R, Y, P, Y, Y
+  13 0f 33 33 33 33  // Button 10: P, L, Semicolon, Semicolon, Semicolon, Semicolon
+  2a 2a 2a 2a 2a 00  // Button 11: Backspace,         , <empty>
+  e0 e0 e0 e0 e0 00  // Button 12: Ctrl,              , <empty>
+  04 04 04 04 04 04  // Button 13: A
+  16 12 15 16 15 15  // Button 14: S, O, R, S, R, R
+  07 08 16 0b 16 16  // Button 15: D, E, S, H, S, S
+  09 18 17 17 17 17  // Button 16: F, U, T, T, T, T
+  0a 0c 07 0a 0a 0a  // Button 17: G, I, D, G, G, G
+  0b 07 0b 1c 10 10  // Button 18: H, D, H, Y, M, M
+  0d 0b 11 11 11 11  // Button 19: J, H, N, N, N, N
+  0e 17 08 08 08 08  // Button 20: K, T, E, E, E, E
+  0f 11 0c 12 0c 0c  // Button 21: L, N, I, O, I, I
+  33 16 12 0c 12 12  // Button 22: Semicolon, S, O, I, O, O
+  34 2d 34 34 34 00  // Button 23: Apos, Minus, Apos, Apos, Apos, <empty>
+  00 00 00 00 00 00  // Button 24: <Special cased shift/steno>
+  1d 33 1d 1d 1d 00  // Button 25: Z, Semicolon, Z, Z, Z, <empty>
+  1b 14 1b 1b 1b 1b  // Button 26: X, Q, X, X, X, X
+  06 0d 06 10 06 06  // Button 27: C, J, C, M, C, C
+  19 0e 19 06 07 07  // Button 28: V, K, V, C, D, D
+  05 1b 05 19 19 19  // Button 29: B, X, B, V, V, V
+  11 05 0e 0e 0e 0e  // Button 30: N, B, K, K, K, K
+  10 10 10 0f 0b 0b  // Button 31: M, M, M, L, H, H
+  36 1a 36 36 36 36  // Button 32: Comma, W, Comma, Comma, Comma, Comma
+  37 19 37 37 37 37  // Button 33: Period, V, Period, Period, Period, Period
+  38 1d 38 38 38 38  // Button 34: Slash, Z, Slash, Slash, Slash, Slash
+  e5 e5 e5 e5 e5 e5  // Button 35: Right Shift
+  e3 e3 e3 e3 e3 29  // Button 36: Meta (Command, Windows),_,_,_, Esc
+  e2 e2 e2 e2 e2 28  // Button 37: Alt, Alt, Alt, Alt, Alt, Ret
+  00 00 00 00 00 2b  // Button 38: <Special case navigation/space>, Tab
+  2c 2c 2c 2c 2c 2c  // Button 39: Space
+  00 00 00 00 00 2a  // Button 40: <Special case Symbol>,         , Bspc
+  00 00 00 00 00 4c  // Button 41: <Special case Function/Enter>  , Del
 ]];
 
 const SHIFT_IMAGE = [[
@@ -1032,7 +1120,7 @@ func init() {
 
   updateAllButtonColors();
 
-  setLayer(layer);
+  setLayer(ALPHABETIC_LAYER);
   updateScreenContrast();
 
   updateBoardPower();
@@ -1041,22 +1129,23 @@ func init() {
 
 // Uncomment this function when developing to ensure callbacks and timers
 // work properly, otherwise they may call a wrong address in the script.
-//
-// func tick() {
-//   if (USE_STATUS_BAR) {
-//     setScript(SCRIPT_ID_DISPLAY_OVERLAY, @drawDisplayOverlay);
-//   }
-//   setScript(SCRIPT_ID_BATTERY_UPDATE, @onBatteryUpdate);
-//   setScript(SCRIPT_ID_CONNECTION_UPDATE, @onConnectionUpdate);
-//   setScript(SCRIPT_ID_PAIR_CONNECTION_UPDATE, @onConnectionUpdate);
-//   setScript(SCRIPT_ID_KEYBOARD_LED_STATUS_UPDATE, @onKeyboardLedStatusUpdate);
-//
-//   if (HAS_BLE) {
-//     setScript(SCRIPT_ID_BLE_ADVERTISING_UPDATE, @onConnectionUpdate);
-//   }
-//
-//   updateBoardPower();
-// }
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+func tick() {
+  if (USE_STATUS_BAR) {
+    setScript(SCRIPT_ID_DISPLAY_OVERLAY, @drawDisplayOverlay);
+  }
+  setScript(SCRIPT_ID_BATTERY_UPDATE, @onBatteryUpdate);
+  setScript(SCRIPT_ID_CONNECTION_UPDATE, @onConnectionUpdate);
+  setScript(SCRIPT_ID_PAIR_CONNECTION_UPDATE, @onConnectionUpdate);
+  setScript(SCRIPT_ID_KEYBOARD_LED_STATUS_UPDATE, @onKeyboardLedStatusUpdate);
+
+  if (HAS_BLE) {
+    setScript(SCRIPT_ID_BLE_ADVERTISING_UPDATE, @onConnectionUpdate);
+  }
+
+  updateBoardPower();
+}
+// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 
 func shouldUseScreenSaver() var {
@@ -1984,11 +2073,14 @@ func fuzzyLayerTimeout() {
 }
 
 func handlePress(buttonIndex, stenoKey, symbolsKey, functionKey, navKey, numPadKey) {
+  // ???
   if (!isInPressAll()) {
     updateButtonColor(buttonIndex);
   }
+  // display updating
   updateScreenSaverTimer();
 
+  // get the non-steno default layer key
   var alphabeticKey = buttonScanCodes[ALPHABETIC_LAYOUT_COUNT * buttonIndex + alphabeticLayout];
   if (isSettingsLayer()) {
     return;
@@ -2092,186 +2184,101 @@ func handleWordCapsAndCapsLock() {
   }
 }
 
-func onPress0() {
-  if (layer & STENO_MASK) {
-      setInputHint(INPUT_HINT_KEYBOARD);
+// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< begin!!!
+func layerSwitch(gotoLayer) {
+  if (layer != gotoLayer) {
+    // release all pressed scan codes and steno keys. This does NOT call any release scripts.
+    releaseAll();
+    // swap global variable layer
+    layer = gotoLayer;
+    // call all press scripts for buttons that are pressed in the new layer
+    pressAll();
   }
-  handlePress(0, SC_TAB, SC_GRAVE, SC_NONE, SC_NONE, SC_NONE);
+}
 
-  if (isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_USB, CONNECTION_USB2, CONNECTION_BLE);
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "USB L");
-    }
-  }
+func onPress0() {
+  handlePress(0, SC_TAB, SC_GRAVE, SC_NONE, SC_NONE, SC_NONE);
 }
 func onRelease0() {
   handleRelease(0, SC_TAB, SC_GRAVE, SC_NONE, SC_NONE, SC_NONE);
-
-  if (layer & STENO_MASK) {
-      setInputHint(INPUT_HINT_STENOGRAPHY);
-  }
 }
 
 func onPress1() {
   handlePress(1, SK_S1 | KEY_STENO, SC_1, SC_F9, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_BLE, CONNECTION_USB, CONNECTION_USB2);
-    setBleProfile(0);
-    if (HAS_DISPLAY) {
-      drawBleSummary();
-    }
-    startTimer(TIMER_ID_PAIRING_HOLD, 2000, 0, @onPairingHoldTimer);
-  }
 }
 func onRelease1() {
   handleRelease(1, SK_S1 | KEY_STENO, SC_1, SC_F9, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    stopTimer(TIMER_ID_PAIRING_HOLD);
-  }
 }
 
 func onPress2() {
   handlePress(2, SK_TL | KEY_STENO, SC_2, SC_F10, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_BLE, CONNECTION_USB, CONNECTION_USB2);
-    setBleProfile(1);
-    if (HAS_DISPLAY) {
-      drawBleSummary();
-    }
-    startTimer(TIMER_ID_PAIRING_HOLD, 2000, 0, @onPairingHoldTimer);
-  }
 }
 func onRelease2() {
   handleRelease(2, SK_TL | KEY_STENO, SC_2, SC_F10, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    stopTimer(TIMER_ID_PAIRING_HOLD);
-  }
 }
 
 func onPress3() {
   handlePress(3, SK_PL | KEY_STENO, SC_3, SC_F11, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_BLE, CONNECTION_USB, CONNECTION_USB2);
-    setBleProfile(2);
-    if (HAS_DISPLAY) {
-      drawBleSummary();
-    }
-    startTimer(TIMER_ID_PAIRING_HOLD, 2000, 0, @onPairingHoldTimer);
-  }
 }
 func onRelease3() {
   handleRelease(3, SK_PL | KEY_STENO, SC_3, SC_F11, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    stopTimer(TIMER_ID_PAIRING_HOLD);
-  }
 }
 
 func onPress4() {
   handlePress(4, SK_HL | KEY_STENO, SC_4, SC_F12, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_BLE, CONNECTION_USB, CONNECTION_USB2);
-    setBleProfile(3);
-    if (HAS_DISPLAY) {
-      drawBleSummary();
-    }
-    startTimer(TIMER_ID_PAIRING_HOLD, 2000, 0, @onPairingHoldTimer);
-  }
 }
 func onRelease4() {
   handleRelease(4, SK_HL | KEY_STENO, SC_4, SC_F12, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    stopTimer(TIMER_ID_PAIRING_HOLD);
-  }
 }
 
 func onPress5() {
   handlePress(5, SK_STAR1 | KEY_STENO, SC_5, SC_NONE, SC_CONSUMER_BRIGHTNESS_UP, SC_NONE);
-
-  if (isSettingsLayer()) {
-    setPreferredConnection(CONNECTION_USB2, CONNECTION_USB, CONNECTION_BLE);
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "USB R");
-    }
-  }
 }
-func onRelease5() { handleRelease(5, SK_STAR1 | KEY_STENO, SC_5, SC_NONE, SC_CONSUMER_BRIGHTNESS_UP, SC_NONE); }
+func onRelease5() {
+  handleRelease(5, SK_STAR1 | KEY_STENO, SC_5, SC_NONE, SC_CONSUMER_BRIGHTNESS_UP, SC_NONE);
+}
 
 func onPress6() {
   handlePress(6, SK_STAR2 | KEY_STENO, SC_6, SC_NONE, SC_CONSUMER_VOLUME_UP, SC_NONE);
-
-  if (isSettingsLayer()) {
-    if (speed < 8) {
-      // Adjust hue to avoid glitches.
-      hueShift = hueShift + animationTime() * (SPEED_VALUES[speed] - SPEED_VALUES[speed + 1]);
-
-      speed = speed + 1;
-    }
-    drawSpeed();
-  }
 }
-func onRelease6() { handleRelease(6, SK_STAR2 | KEY_STENO, SC_6, SC_NONE, SC_CONSUMER_VOLUME_UP, SC_NONE); }
+func onRelease6() {
+  handleRelease(6, SK_STAR2 | KEY_STENO, SC_6, SC_NONE, SC_CONSUMER_VOLUME_UP, SC_NONE);
+}
 
-func onPress7() { handlePress(7, SK_FR | KEY_STENO, SC_7, SC_NONE, SC_BACKSPACE, SC_KP_7); }
-func onRelease7() { handleRelease(7, SK_FR | KEY_STENO, SC_7, SC_NONE, SC_BACKSPACE, SC_KP_7); }
+func onPress7() {
+  handlePress(7, SK_FR | KEY_STENO, SC_7, SC_NONE, SC_BACKSPACE, SC_KP_7);
+}
+func onRelease7() {
+  handleRelease(7, SK_FR | KEY_STENO, SC_7, SC_NONE, SC_BACKSPACE, SC_KP_7);
+}
 
 func onPress8() {
   handlePress(8, SK_PR | KEY_STENO, SC_8, SC_NONE, SC_UP, SC_KP_8);
-
-  if (isSettingsLayer()) {
-    if (brightness < 8) {
-      brightness = brightness + 1;
-      updateBoardPower();
-      updateScreenContrast();
-    }
-    drawBrightness();
-  }
 }
-func onRelease8() { handleRelease(8, SK_PR | KEY_STENO, SC_8, SC_NONE, SC_UP, SC_KP_8); }
+func onRelease8() {
+  handleRelease(8, SK_PR | KEY_STENO, SC_8, SC_NONE, SC_UP, SC_KP_8);
+}
 
 func onPress9() {
   handlePress(9, SK_LR | KEY_STENO, SC_9, SC_NONE, SC_DELETE, SC_KP_9);
-
-  if (isSettingsLayer()) {
-    if (saturation < 8) {
-      saturation = saturation + 1;
-      updateKeyRgb();
-    }
-    drawSaturation();
-  }
 }
-func onRelease9() { handleRelease(9, SK_LR | KEY_STENO, SC_9, SC_NONE, SC_DELETE, SC_KP_9); }
+func onRelease9() {
+  handleRelease(9, SK_LR | KEY_STENO, SC_9, SC_NONE, SC_DELETE, SC_KP_9);
+}
 
 func onPress10() {
   handlePress(10, SK_TR | KEY_STENO, SC_0, SC_NONE, SC_PAGE_UP, SC_KP_ASTERISK);
-
-  if (isSettingsLayer()) {
-    hueShift = hueShift - 0x800;
-  }
 }
-func onRelease10() { handleRelease(10, SK_TR | KEY_STENO, SC_0, SC_NONE, SC_PAGE_UP, SC_KP_ASTERISK); }
+func onRelease10() {
+  handleRelease(10, SK_TR | KEY_STENO, SC_0, SC_NONE, SC_PAGE_UP, SC_KP_ASTERISK);
+}
 
 func onPress11() {
   handlePress(11, SK_DR | KEY_STENO, SC_EQUAL, SC_NONE, SC_HOME, SC_BACKSPACE);
-
-  if (isSettingsLayer()) {
-    if (hueSpread < 8) {
-      hueSpread = hueSpread + 1;
-    }
-    drawHueSpread();
-  }
 }
-func onRelease11() { handleRelease(11, SK_DR | KEY_STENO, SC_EQUAL, SC_NONE, SC_HOME, SC_BACKSPACE); }
+func onRelease11() {
+  handleRelease(11, SK_DR | KEY_STENO, SC_EQUAL, SC_NONE, SC_HOME, SC_BACKSPACE);
+}
 
 // 2nd row
 
@@ -2279,185 +2286,89 @@ var timer12;
 var pressCount12;
 var wasSteno12;
 func onPress12() {
-  if (!isInPressAll()) {
-    wasSteno12 = layer == STENO_MASK;
-    if (wasSteno12) {
-      setLayer(layer | TEMPORARY_QWERTY_MASK);
-      pressAll();
-      timer12 = getTime();
-      pressCount12 = pressCount;
-      return;
-    }
-  }
   handlePress(12, SC_NONE, SC_GRAVE | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
-  update24();
-
-  if (!isInPressAll()) {
-    timer12 = getTime();
-    pressCount12 = pressCount;
-  }
-
-  if (ENABLE_BLE_TRANSMIT_POWER_CONTROLS && isSettingsLayer()) {
-    updateBleTransmitPower(bleTransmitPower < 5 ? bleTransmitPower + 1 : 5);
-  }
 }
 func onRelease12() {
-  if (wasSteno12) {
-    setLayer(STENO_MASK);
-  } else {
-    handleRelease(12, SC_NONE, SC_GRAVE | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
-    update24();
-  }
-
-  if (((layer & TEMPORARY_QWERTY_MASK) || layer == ALPHABETIC_LAYER || wasSteno12)
-      && pressCount12 == pressCount
-      && getTime() - timer12 < TAP_THRESHOLD) {
-    tap(SC_ESC);
-    if (HAS_U2F) {
-      replyUserPresence(0);
-    }
-  }
+  handleRelease(12, SC_NONE, SC_GRAVE | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
 }
 
 func onPress13() {
   handlePress(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
-
-  if (ENABLE_BLE_TRANSMIT_POWER_CONTROLS && isSettingsLayer()) {
-    updateBleSplitTransmitPower(bleSplitTransmitPower < 5 ? bleSplitTransmitPower + 1 : 5);
-  }
 }
 
-func onRelease13() { handleRelease(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META); }
+func onRelease13() {
+  handleRelease(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+}
 
 func onPress14() {
   handlePress(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
-
-  if (isSettingsLayer()) {
-    console("set_steno_mode embedded");
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      if (DISPLAY_WIDTH < 64) {
-        drawImage(0, DISPLAY_WIDTH/2 - 16, DISPLAY_HEIGHT - 48, EMBEDDED_IMAGE);
-      } else {
-        drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT - 48 + 10, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Javelin");
-      }
-    }
-  }
 }
-func onRelease14() { handleRelease(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT); }
+func onRelease14() {
+  handleRelease(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+}
 
 func onPress15() {
   handlePress(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
-
-  if (isSettingsLayer()) {
-    console("set_steno_mode gemini");
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      if (DISPLAY_WIDTH < 64) {
-        drawImage(0, DISPLAY_WIDTH/2 - 16, DISPLAY_HEIGHT - 48, GEMINI_IMAGE);
-      } else {
-        drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT - 48 + 10, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Gemini");
-      }
-    }
-  }
 }
-func onRelease15() { handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL); }
+func onRelease15() {
+  handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+}
 
 func onPress16() {
   handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-
-  if (isSettingsLayer()) {
-    console("set_steno_mode tx_bolt");
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT - 48 + 10, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "TX Bolt");
-    }
-  }
 }
-func onRelease16() { handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT); }
+func onRelease16() {
+  handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+}
 
 func onPress17() {
   handlePress(17, SK_STAR3 | KEY_STENO, SC_5 | KEY_SHIFT, SC_NONE, SC_CONSUMER_BRIGHTNESS_DOWN, SC_NONE);
-
-  if (isSettingsLayer()) {
-    console("set_steno_mode plover_hid");
-    if (HAS_DISPLAY) {
-      updateDisplay0();
-      if (DISPLAY_WIDTH < 64) {
-        drawImage(0, DISPLAY_WIDTH/2 - 16, DISPLAY_HEIGHT - 48, PLOVER_HID_IMAGE);
-      } else {
-        drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT - 48 + 10, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Plover HID");
-      }
-    }
-  }
 }
-func onRelease17() { handleRelease(17, SK_STAR3 | KEY_STENO, SC_5 | KEY_SHIFT, SC_NONE, SC_CONSUMER_BRIGHTNESS_DOWN, SC_NONE); }
+func onRelease17() {
+  handleRelease(17, SK_STAR3 | KEY_STENO, SC_5 | KEY_SHIFT, SC_NONE, SC_CONSUMER_BRIGHTNESS_DOWN, SC_NONE);
+}
 
 func onPress18() {
   handlePress(18, SK_STAR4 | KEY_STENO, SC_6 | KEY_SHIFT, SC_NONE, SC_CONSUMER_VOLUME_DOWN, SC_NONE);
-
-  if (isSettingsLayer()) {
-    if (speed > 0) {
-      // Adjust hue to avoid glitches.
-      hueShift = hueShift + animationTime() * (SPEED_VALUES[speed] - SPEED_VALUES[speed - 1]);
-
-      speed = speed - 1;
-    }
-    drawSpeed();
-  }
 }
-func onRelease18() { handleRelease(18, SK_STAR4 | KEY_STENO, SC_6 | KEY_SHIFT, SC_NONE, SC_CONSUMER_VOLUME_DOWN, SC_NONE); }
+func onRelease18() {
+  handleRelease(18, SK_STAR4 | KEY_STENO, SC_6 | KEY_SHIFT, SC_NONE, SC_CONSUMER_VOLUME_DOWN, SC_NONE);
+}
 
-func onPress19() { handlePress(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4); }
-func onRelease19() { handleRelease(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4); }
+func onPress19() {
+  handlePress(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+}
+func onRelease19() {
+  handleRelease(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+}
 
 func onPress20() {
   handlePress(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
-
-  if (isSettingsLayer()) {
-    if (brightness > 0) {
-      brightness = brightness - 1;
-      updateBoardPower();
-      updateScreenContrast();
-    }
-    drawBrightness();
-  }
 }
-func onRelease20() { handleRelease(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5); }
+func onRelease20() {
+  handleRelease(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+}
 
 func onPress21() {
   handlePress(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
-
-  if (isSettingsLayer()) {
-    if (saturation > 0) {
-      saturation = saturation - 1;
-      updateKeyRgb();
-    }
-    drawSaturation();
-  }
 }
-func onRelease21() { handleRelease(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6); }
+func onRelease21() {
+  handleRelease(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+}
 
 func onPress22() {
   handlePress(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
-
-  if (isSettingsLayer()) {
-    hueShift = hueShift + 0x800;
-  }
 }
-func onRelease22() { handleRelease(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS); }
+func onRelease22() {
+  handleRelease(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+}
 
 func onPress23() {
   handlePress(23, SK_ZR | KEY_STENO, SC_EQUAL | KEY_SHIFT, SC_NONE, SC_END, SC_KP_PLUS);
-
-  if (isSettingsLayer()) {
-    if (hueSpread > 0) {
-      hueSpread = hueSpread - 1;
-    }
-    drawHueSpread();
-  }
 }
-func onRelease23() { handleRelease(23, SK_ZR | KEY_STENO, SC_EQUAL | KEY_SHIFT, SC_NONE, SC_END, SC_KP_PLUS); }
+func onRelease23() {
+  handleRelease(23, SK_ZR | KEY_STENO, SC_EQUAL | KEY_SHIFT, SC_NONE, SC_END, SC_KP_PLUS);
+}
 
 // 3rd row
 
@@ -2478,128 +2389,80 @@ func update24() {
 }
 func onPress24() {
   handlePress(24, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
-
-  if (isInPressAll()) {
-    update24();
-    return;
-  }
-
-  wasSteno24 = layer == STENO_MASK;
-  wasShiftPressed24 = (layer == ALPHABETIC_LAYER || (layer & TEMPORARY_QWERTY_MASK));
-
-  if (ENABLE_BLE_TRANSMIT_POWER_CONTROLS && isSettingsLayer()) {
-    updateBleTransmitPower(bleTransmitPower > 0 ? bleTransmitPower - 1 : 0);
-    return;
-  }
-
-  if (wasSteno24) {
-    setLayer(layer ^ STENO_MASK);
-    pressCount24 = pressCount;
-    pressAll();
-  } else {
-    if (wasShiftPressed24) {
-      press(SC_L_SHIFT);
-    }
-    pressCount24 = pressCount;
-  }
-  timer24 = getTime();
-
-  handleWordCapsAndCapsLock();
 }
 func onRelease24() {
   handleRelease(24, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
-
-  if (wasShiftPressed24) {
-    release(SC_L_SHIFT);
-  }
-
-  if (wasSteno24) {
-    // If the keypress was in steno mode, and other keys were pressed, or it
-    // was a long press, drop immediately back to steno mode, and drop all masks.
-    if (pressCount24 != pressCount || layer || getTime() - timer24 >= TAP_THRESHOLD) {
-      setLayer(STENO_MASK);
-    }
-  } else if (layer == 0 && pressCount24 == pressCount
-      && getTime() - timer24 < TAP_THRESHOLD
-      && checkButtonState("000000000000000000000000000000000000000000")) {
-    // A tap of the key turns on steno mode.
-    // Automatically turn off word caps when entering steno mode.
-
-    setLayer(STENO_MASK);
-  }
-  updateUnderglowRgb();
 }
 
 func onPress25() {
   handlePress(25, SC_NONE, SC_BACKSLASH, SC_F1, SC_NONE, SC_NONE);
-
-  if (ENABLE_BLE_TRANSMIT_POWER_CONTROLS && isSettingsLayer()) {
-    updateBleSplitTransmitPower(bleSplitTransmitPower > 0 ? bleSplitTransmitPower - 1 : 0);
-  }
 }
-func onRelease25() { handleRelease(25, SC_NONE, SC_BACKSLASH, SC_F1, SC_NONE, SC_NONE); }
+func onRelease25() {
+  handleRelease(25, SC_NONE, SC_BACKSLASH, SC_F1, SC_NONE, SC_NONE);
+}
 
 func onPress26() {
   handlePress(26, SC_NONE, SC_BACKSLASH | KEY_SHIFT, SC_F2, SC_NONE, SC_NONE);
-
-  if (HAS_DISPLAY && isSettingsLayer()) {
-    stenoDisplay = STENO_DISPLAY_WPM;
-    updateDisplay0();
-    drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "WPM");
-  }
 }
-func onRelease26() { handleRelease(26, SC_NONE, SC_BACKSLASH | KEY_SHIFT, SC_F2, SC_NONE, SC_NONE); }
+func onRelease26() {
+  handleRelease(26, SC_NONE, SC_BACKSLASH | KEY_SHIFT, SC_F2, SC_NONE, SC_NONE);
+}
 
 func onPress27() {
   handlePress(27, SC_NONE, SC_MINUS, SC_F3, SC_NONE, SC_NONE);
-
-  if (HAS_DISPLAY && isSettingsLayer()) {
-    stenoDisplay = STENO_DISPLAY_PAPER_TAPE;
-    updateDisplay0();
-    drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Tape");
-  }
 }
-func onRelease27() { handleRelease(27, SC_NONE, SC_MINUS, SC_F3, SC_NONE, SC_NONE); }
+func onRelease27() {
+  handleRelease(27, SC_NONE, SC_MINUS, SC_F3, SC_NONE, SC_NONE);
+}
 
 func onPress28() {
   handlePress(28, SC_NONE, SC_L_BRACKET, SC_F4, SC_NONE, SC_NONE);
-
-  if (HAS_DISPLAY && isSettingsLayer()) {
-    stenoDisplay = STENO_DISPLAY_STROKES_WPM;
-    updateDisplay0();
-    drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Strokes");
-  }
 }
-func onRelease28() { handleRelease(28, SC_NONE, SC_L_BRACKET, SC_F4, SC_NONE, SC_NONE); }
+func onRelease28() {
+  handleRelease(28, SC_NONE, SC_L_BRACKET, SC_F4, SC_NONE, SC_NONE);
+}
 
 func onPress29() {
   handlePress(29, SC_NONE, SC_L_BRACKET | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
-
-  if (HAS_BLE && isSettingsLayer()) {
-    if (isBleProfileConnected(getBleProfile())) {
-      disconnectBle();
-    } else if (isBleProfilePaired(getBleProfile())) {
-      unpairBle();
-      drawBleSummary();
-    }
-  }
 }
-func onRelease29() { handleRelease(29, SC_NONE, SC_L_BRACKET | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE); }
+func onRelease29() {
+  handleRelease(29, SC_NONE, SC_L_BRACKET | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
+}
 
-func onPress30() { handlePress(30, SC_NONE, SC_R_BRACKET | KEY_SHIFT, SC_NONE, SC_CONSUMER_MUTE, SC_NONE); }
-func onRelease30() { handleRelease(30, SC_NONE, SC_R_BRACKET | KEY_SHIFT, SC_NONE, SC_CONSUMER_MUTE, SC_NONE); }
+func onPress30() {
+  handlePress(30, SC_NONE, SC_R_BRACKET | KEY_SHIFT, SC_NONE, SC_CONSUMER_MUTE, SC_NONE);
+}
+func onRelease30() {
+  handleRelease(30, SC_NONE, SC_R_BRACKET | KEY_SHIFT, SC_NONE, SC_CONSUMER_MUTE, SC_NONE);
+}
 
-func onPress31() { handlePress(31, SC_NONE, SC_R_BRACKET, SC_NONE, SC_NONE, SC_KP_1); }
-func onRelease31() { handleRelease(31, SC_NONE, SC_R_BRACKET, SC_NONE, SC_NONE, SC_KP_1); }
+func onPress31() {
+  handlePress(31, SC_NONE, SC_R_BRACKET, SC_NONE, SC_NONE, SC_KP_1);
+}
+func onRelease31() {
+  handleRelease(31, SC_NONE, SC_R_BRACKET, SC_NONE, SC_NONE, SC_KP_1);
+}
 
-func onPress32() { handlePress(32, SC_NONE, SC_MINUS | KEY_SHIFT, SC_NONE, SC_NONE, SC_KP_2); }
-func onRelease32() { handleRelease(32, SC_NONE, SC_MINUS | KEY_SHIFT, SC_NONE, SC_NONE, SC_KP_2); }
+func onPress32() {
+  handlePress(32, SC_NONE, SC_MINUS | KEY_SHIFT, SC_NONE, SC_NONE, SC_KP_2);
+}
+func onRelease32() {
+  handleRelease(32, SC_NONE, SC_MINUS | KEY_SHIFT, SC_NONE, SC_NONE, SC_KP_2);
+}
 
-func onPress33() { handlePress(33, SC_NONE, SC_DOT, SC_NONE, SC_NONE, SC_KP_3); }
-func onRelease33() { handleRelease(33, SC_NONE, SC_DOT, SC_NONE, SC_NONE, SC_KP_3); }
+func onPress33() {
+  handlePress(33, SC_NONE, SC_DOT, SC_NONE, SC_NONE, SC_KP_3);
+}
+func onRelease33() {
+  handleRelease(33, SC_NONE, SC_DOT, SC_NONE, SC_NONE, SC_KP_3);
+}
 
-func onPress34() { handlePress(34, SC_NONE, SC_SLASH, SC_NONE, SC_NONE, SC_KP_SLASH); }
-func onRelease34() { handleRelease(34, SC_NONE, SC_SLASH, SC_NONE, SC_NONE, SC_KP_SLASH); }
+func onPress34() {
+  handlePress(34, SC_NONE, SC_SLASH, SC_NONE, SC_NONE, SC_KP_SLASH);
+}
+func onRelease34() {
+  handleRelease(34, SC_NONE, SC_SLASH, SC_NONE, SC_NONE, SC_KP_SLASH);
+}
 
 func tapCapsLock() {
   // Tapping caps lock on macOS does not activate it.
@@ -2612,47 +2475,7 @@ func tapCapsLock() {
 
 var magicKey35;
 func onPress35() {
-  // Magic key handling.
-  magicKey35 = SC_NONE;
-  if (layer & (SYMBOL_MASK | NUMPAD_MASK)) {
-    if (lastPressKey == SC_MINUS || lastPressKey == SC_EQUAL) {
-      magicKey35 = SC_DOT | KEY_SHIFT;
-    } else if (lastPressKey == (SC_9 | KEY_SHIFT) || lastPressKey == SC_BACKSLASH || lastPressKey == (SC_APOSTROPHE | KEY_SHIFT)) {
-      magicKey35 = SC_APOSTROPHE | KEY_SHIFT;
-    } else if (SC_1 <= lastPressKey && lastPressKey <= SC_0) {
-      magicKey35 = SC_COMMA;
-    } else if (SC_KP_1 <= lastPressKey && lastPressKey <= SC_KP_0) {
-      magicKey35 = SC_COMMA;
-    } else if ((lastPressKey | KEY_SHIFT) == (SC_L_BRACKET | KEY_SHIFT)) {
-      magicKey35 = SC_ENTER;
-    } else if (lastPressKey == SC_COMMA || lastPressKey == SC_DOT || lastPressKey == SC_KP_DOT) {
-      magicKey35 = SC_SPACE;
-    }
-  }
-
   handlePress(35, SC_NONE, magicKey35, SC_NONE, SC_NONE, magicKey35);
-
-  handleWordCapsAndCapsLock();
-
-  if (isSettingsLayer()) {
-    alphabeticLayout = (alphabeticLayout + 1) % ALPHABETIC_LAYOUT_COUNT;
-    updateDisplay0();
-    if (alphabeticLayout == ALPHABETIC_LAYOUT_QWERTY) {
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "QWERTY");
-    } else if (alphabeticLayout == ALPHABETIC_LAYOUT_DVORAK) {
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Dvorak");
-    } else if (alphabeticLayout == ALPHABETIC_LAYOUT_COLEMAK) {
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Colemak");
-    } else if (alphabeticLayout == ALPHABETIC_LAYOUT_WORKMAN) {
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "Workman");
-    } else if (alphabeticLayout == ALPHABETIC_LAYOUT_COLEMAK_DH) {
-      drawText(0, DISPLAY_WIDTH/2, DISPLAY_HEIGHT * 3 / 4, FONT_ID_NORMAL, TEXT_ALIGNMENT_MIDDLE, "ColemakDH");
-    }
-  }
-
-  if (HAS_U2F && checkButtonState("000000000000000000000000100000000001110010")) {
-    replyUserPresence(1);
-  }
 }
 func onRelease35() {
   handleRelease(35, SC_NONE, magicKey35, SC_NONE, SC_NONE, magicKey35);
@@ -2662,163 +2485,48 @@ func onRelease35() {
 
 var wasSteno36;
 func onPress36() {
-  if (!isInPressAll()) {
-    wasSteno36 = layer == STENO_MASK;
-    if (wasSteno36) {
-      setLayer(layer | TEMPORARY_QWERTY_MASK);
-      pressAll();
-      return;
-    }
-  }
   handlePress(36, SC_NONE, SC_L_META, SC_NONE, SC_NONE, SC_NONE);
-  update24();
 }
 func onRelease36() {
   handleRelease(36, SC_NONE, SC_L_META, SC_NONE, SC_NONE, SC_NONE);
-  update24();
-  if (wasSteno36) {
-    setLayer(STENO_MASK);
-  }
 }
 
 var timer37;
 var pressCount37;
 func onPress37() {
   handlePress(37, SK_A | KEY_STENO, SC_L_ALT, SC_NONE, SC_NONE, SC_NONE);
-  if (!isInPressAll()) {
-    timer37 = getTime();
-    pressCount37 = pressCount37;
-
-  }
-  if ((layer & (NAV_MASK | NUMPAD_MASK)) == NAV_MASK) {
-    setLayer(layer | NUMPAD_MASK);
-    pressAll();
-  }
-  handleWordCapsAndCapsLock();
 }
 func onRelease37() {
   handleRelease(37, SK_A | KEY_STENO, SC_L_ALT, SC_NONE, SC_NONE, SC_NONE);
-  if (!isInPressAll() && layer == 0 && pressCount37 == pressCount && getTime() - timer37 < TAP_THRESHOLD) {
-    tap(SC_ENTER);
-  }
-  if (layer & NUMPAD_MASK) {
-    setLayer(layer ^ NUMPAD_MASK);
-    pressAll();
-  }
 }
 
 var timer38;
 var pressCount38;
 func onPress38() {
   handlePress(38, SK_O | KEY_STENO, SC_L_CTRL, SC_NONE, SC_NONE, SC_NONE);
-
-  if (!isInPressAll()) {
-    timer38 = getTime();
-  }
-
-  if (layer == 0) {
-    setLayer(layer | NAV_MASK);
-    pressAll();
-    if (!isInPressAll()) {
-      navLayerPressTimestamp = getTime();
-      pressCount38 = pressCount;
-    }
-  } else if (layer & TEMPORARY_QWERTY_MASK) {
-    press(SC_SPACE);
-  }
 }
 func onRelease38() {
   handleRelease(38, SK_O | KEY_STENO, SC_L_CTRL, SC_NONE, SC_NONE, SC_NONE);
-  if (layer & NAV_MASK) {
-    var startPressCount = pressCount;
-
-    setLayer(layer & ~(NAV_MASK | NUMPAD_MASK));
-    pressAll();
-
-    if (layer == 0 && pressCount38 == startPressCount && getTime() - navLayerPressTimestamp < TAP_THRESHOLD) {
-      tap(SC_SPACE);
-    }
-    if (deferredAlphabeticKey != 0 && !isModifierKey(deferredAlphabeticKey)) {
-      tap(deferredAlphabeticKey);
-      deferredLayerKey = 0;
-      deferredAlphabeticKey = 0;
-    }
-  } else if (layer & SYMBOL_MASK) {
-    if (getTime() - timer38 < TAP_THRESHOLD) {
-      tap(SC_SPACE);
-    }
-  } else if (layer & TEMPORARY_QWERTY_MASK) {
-    release(SC_SPACE);
-  }
 }
 
-func onPress39() { handlePress(39, SK_E | KEY_STENO, SC_NONE, SC_NONE, SC_SPACE, SC_SPACE); }
-func onRelease39() { handleRelease(39, SK_E | KEY_STENO, SC_NONE, SC_NONE, SC_SPACE, SC_SPACE); }
+func onPress39() {
+  handlePress(39, SK_E | KEY_STENO, SC_NONE, SC_NONE, SC_SPACE, SC_SPACE);
+}
+func onRelease39() {
+  handleRelease(39, SK_E | KEY_STENO, SC_NONE, SC_NONE, SC_SPACE, SC_SPACE);
+}
 
 func onPress40() {
   handlePress(40, SK_U | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_0);
-  if ((layer | (NAV_MASK | FUNCTION_MASK)) == (NAV_MASK | FUNCTION_MASK)
-      || layer == (STENO_MASK | TEMPORARY_QWERTY_MASK)) {
-    setLayer((layer | SYMBOL_MASK) & ~NAV_MASK);
-    pressAll();
-
-    if (HAS_BLE && isSettingsLayer()) {
-      drawBleSummary();
-    }
-  }
 }
 func onRelease40() {
   handleRelease(40, SK_U | KEY_STENO, SC_L_CTRL, SC_NONE, SC_NONE, SC_KP_0);
-  if (layer & SYMBOL_MASK) {
-    setLayer(layer ^ SYMBOL_MASK);
-    pressAll();
-  }
 }
 
 var pressCount41;
 func onPress41() {
   handlePress(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_ENTER, SC_KP_DOT);
-  if ((layer | SYMBOL_MASK) == SYMBOL_MASK) {
-    pressCount = pressCount + 1;
-    setLayer(layer | FUNCTION_MASK);
-    pressAll();
-    functionLayerPressTimestamp = getTime();
-    pressCount41 = pressCount;
-
-    if (HAS_BLE && isSettingsLayer()) {
-      drawBleSummary();
-    }
-  } else if (layer & TEMPORARY_QWERTY_MASK) {
-    press(SC_ENTER);
-  }
 }
 func onRelease41() {
   handleRelease(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_ENTER, SC_KP_DOT);
-  if (layer & FUNCTION_MASK) {
-    var startPressCount = pressCount;
-
-    setLayer(layer ^ FUNCTION_MASK);
-    pressAll();
-
-    if (layer == ALPHABETIC_LAYER) {
-      if (!wasSteno24 && isButtonPressed(24)) {
-        wasShiftPressed24 = 1;
-        press(SC_L_SHIFT);
-        updateDisplay0();
-      }
-
-      // Give extra time for enter tapping.
-      if (pressCount41 == startPressCount && getTime() - functionLayerPressTimestamp < 2*TAP_THRESHOLD) {
-        tap(SC_ENTER);
-      }
-
-      if (deferredAlphabeticKey != 0 && !isModifierKey(deferredAlphabeticKey)) {
-        tap(deferredAlphabeticKey);
-      }
-    }
-    deferredLayerKey = 0;
-    deferredAlphabeticKey = 0;
-  } else if (layer & TEMPORARY_QWERTY_MASK) {
-    release(SC_ENTER);
-  }
 }

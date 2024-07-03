@@ -2316,23 +2316,30 @@ func onRelease15() {
 }
 
 
-var timer16;
-var pressCount16;
+// this is mod-tap
+const timer16 = 116;
+var state16 = 0;
+func cb() {
+  state16 = 1;
+  pressScanCode(SC_L_SHIFT);
+}
 func onPress16() {
-  handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
-    timer16 = getTime();
-    pressCount16 = pressCount;
-  }
+  state16 = 0;
+  startTimer(timer16, 200, 0, @cb);
 }
 func onRelease16() {
-  handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
-    if (pressCount16 == pressCount && getTime() - timer16 < MODTAP_THRESHOLD) {
-      tap(SC_4);
-    }
+  stopTimer(timer16);
+  if (state16 == 0) {
+    // pressScanCode(SC_T);
+    handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+
+    // releaseScanCode(SC_T);
+    handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+  } else if (isScanCodePressed(SC_L_SHIFT)) {
+    releaseScanCode(SC_L_SHIFT);
   }
 }
+
 
 func onPress17() {
   handlePress(17, SK_STAR3 | KEY_STENO, SC_5 | KEY_SHIFT, SC_NONE, SC_CONSUMER_BRIGHTNESS_DOWN, SC_NONE);

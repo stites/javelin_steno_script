@@ -111,7 +111,7 @@
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
 // |        |   A  |   R  |   S  |   T  |   G  |        |   M  |   N  |   E  |   I  |   O  |        |
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
-// |TODOSten|   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? |        |
+// | Steno  |   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? |        |
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
 //    tap + (TODO) tap-hold  | Esc  |  Ret | Tab  |  | Space| Bspc | Del  |
 //                           |  \   |   \  |  \   |  |      |      |  \   |
@@ -708,6 +708,7 @@ var qwertyPressTimestamp;
 const KEY_STENO = 0x200;
 const KEY_SHIFT = 0x100;
 const TAP_THRESHOLD = 200; // milliseconds for keys that have alternates
+const MODTAP_THRESHOLD = 200; // milliseconds for keys that have mod-tap alternates
 const RELEASE_TO_TAP_THRESHOLD = 200;
 const SCREEN_SAVER_TIMEOUT = 900000; // 15 minutes.
 
@@ -2314,11 +2315,23 @@ func onRelease15() {
   handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
 }
 
+
+var timer16;
+var pressCount16;
 func onPress16() {
   handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    timer16 = getTime();
+    pressCount16 = pressCount;
+  }
 }
 func onRelease16() {
   handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    if (pressCount16 == pressCount && getTime() - timer16 < MODTAP_THRESHOLD) {
+      tap(SC_4);
+    }
+  }
 }
 
 func onPress17() {

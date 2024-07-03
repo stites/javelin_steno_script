@@ -2315,55 +2315,73 @@ func onRelease15() {
   handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
 }
 
-// const timer16 = 116;
-// var state16 = 0;
-// func cb1() {
-//   state16 = 1;
-//   pressScanCode(SC_L_SHIFT);
-// }
-// func cb2() {
-//   state16 = 2;
-//   handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-// }
-// func onPress16() {
-//   if (state16 == 0) {
-//     startTimer(timer16, 200, 0, @cb1);
-//   } else if (state16 == 1) {
-//     startTimer(timer16, 200, 0, @cb2);
-//   } else if (state16 >= 2) {
-//     handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-//   }
-// }
-//
-// func onRelease16() {
-//   stopTimer(timer16);
-//   if (state16 == 0) {
-//     pressScanCode(SC_T);
-//     releaseScanCode(SC_T);
-//   } else if (isScanCodePressed(SC_L_SHIFT)) {
-//     releaseScanCode(SC_L_SHIFT);
-//   }
-// }
+/// this one is broken
+/// // this is mod-tap
+/// const timer16 = 116;
+/// const dancetimer16 = 117;
+/// var state16 = 0;
+/// func cb() {
+///   state16 = 1;
+///   pressScanCode(SC_L_SHIFT);
+/// }
+///
+/// var taps16 = 0;
+/// func dancer() {
+///   taps16 = 0;
+/// }
+///
+/// func onPress16() {
+///   state16 = 0;
+///   startTimer(timer16, 200, 0, @cb);
+///
+///   startTimer(dancetimer16, 500, 0, @dancer);
+///   taps16 = taps16 + 1;
+///   if (taps16 > 1) {
+///     stopTimer(timer16);
+///     handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+///   }
+/// }
+///
+/// func onRelease16() {
+///   if (taps16 == 1) {
+///     // standard mod-tap
+///     stopTimer(timer16);
+///     if (state16 == 0) {
+///       pressScanCode(SC_T);
+///       releaseScanCode(SC_T);
+///
+///     } else if (isScanCodePressed(SC_L_SHIFT)) {
+///       releaseScanCode(SC_L_SHIFT);
+///     }
+///   } else {
+///     stopTimer(timer16);
+///     handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+///     taps16 = 0;
+///   }
+/// }
 
 // this is mod-tap
 const timer16 = 116;
+const dancetimer16 = 117;
 var state16 = 0;
 func cb() {
   state16 = 1;
   pressScanCode(SC_L_SHIFT);
 }
+
 func onPress16() {
+  // TODO: only mod-tap if you are in the colemak layer
   state16 = 0;
   startTimer(timer16, 200, 0, @cb);
 }
+
 func onRelease16() {
+  // TODO: only mod-tap if you are in the colemak layer
   stopTimer(timer16);
   if (state16 == 0) {
-    // pressScanCode(SC_T);
     handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-
-    // releaseScanCode(SC_T);
     handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+
   } else if (isScanCodePressed(SC_L_SHIFT)) {
     releaseScanCode(SC_L_SHIFT);
   }

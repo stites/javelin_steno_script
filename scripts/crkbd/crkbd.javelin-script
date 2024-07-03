@@ -110,6 +110,8 @@
 // |        |   Q  |   W  |   F  |   P  |   B  |        |   J  |   L  |   U  |   Y  | ;  : |        |
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
 // |        |   A  |   R  |   S  |   T  |   G  |        |   M  |   N  |   E  |   I  |   O  |        |
+// |        |   \  |   \  |   \  |   \  |      |        |      |   \  |   \  |   \  |   \  |        |
+// |        | LMeta| LAlt | LCtl | LSft |      |        |      | RSft | RCtl | RAlt | RMeta|        |
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
 // | Steno  |   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? |        |
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
@@ -2186,16 +2188,6 @@ func handleWordCapsAndCapsLock() {
 }
 
 // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< begin!!!
-func layerSwitch(gotoLayer) {
-  if (layer != gotoLayer) {
-    // release all pressed scan codes and steno keys. This does NOT call any release scripts.
-    releaseAll();
-    // swap global variable layer
-    layer = gotoLayer;
-    // call all press scripts for buttons that are pressed in the new layer
-    pressAll();
-  }
-}
 
 func onPress0() {
   handlePress(0, SC_TAB, SC_GRAVE, SC_NONE, SC_NONE, SC_NONE);
@@ -2293,97 +2285,134 @@ func onRelease12() {
   handleRelease(12, SC_NONE, SC_GRAVE | KEY_SHIFT, SC_NONE, SC_NONE, SC_NONE);
 }
 
+const timer13 = 113;
+var state13 = 0;
+const modifier13 = SC_R_META;
+func modtap13() {
+  state13 = 1;
+  pressScanCode(modifier13);
+}
+
 func onPress13() {
-  handlePress(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state13 = 0;
+    startTimer(timer13, MODTAP_THRESHOLD, 0, @modtap13);
+  } else {
+    handlePress(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+  }
 }
 
 func onRelease13() {
-  handleRelease(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer13);
+    if (state13 == 0) {
+      handlePress(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+      handleRelease(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+    } else if (isScanCodePressed(modifier13)) {
+      releaseScanCode(modifier13);
+    }
+  } else {
+    handleRelease(13, SK_S2 | KEY_STENO, SC_1 | KEY_SHIFT, SC_F5, SC_L_META, SC_L_META);
+  }
+}
+
+
+const timer14 = 114;
+var state14 = 0;
+const modifier14 = SC_L_ALT;
+func modtap14() {
+  state14 = 1;
+  pressScanCode(modifier14);
 }
 
 func onPress14() {
-  handlePress(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state14 = 0;
+    startTimer(timer14, MODTAP_THRESHOLD, 0, @modtap14);
+  } else {
+    handlePress(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+  }
 }
+
 func onRelease14() {
-  handleRelease(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer14);
+    if (state14 == 0) {
+      handlePress(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+      handleRelease(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+    } else if (isScanCodePressed(modifier14)) {
+      releaseScanCode(modifier14);
+    }
+  } else {
+    handleRelease(14, SK_KL | KEY_STENO, SC_2 | KEY_SHIFT, SC_F6, SC_L_ALT, SC_L_ALT);
+  }
+}
+
+
+const timer15 = 115;
+var state15 = 0;
+const modifier15 = SC_L_CTRL;
+func modtap15() {
+  state15 = 1;
+  pressScanCode(modifier15);
 }
 
 func onPress15() {
-  handlePress(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
-}
-func onRelease15() {
-  handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state15 = 0;
+    startTimer(timer15, MODTAP_THRESHOLD, 0, @modtap15);
+  } else {
+    handlePress(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+  }
 }
 
-/// this one is broken
-/// // this is mod-tap
-/// const timer16 = 116;
-/// const dancetimer16 = 117;
-/// var state16 = 0;
-/// func cb() {
-///   state16 = 1;
-///   pressScanCode(SC_L_SHIFT);
-/// }
-///
-/// var taps16 = 0;
-/// func dancer() {
-///   taps16 = 0;
-/// }
-///
-/// func onPress16() {
-///   state16 = 0;
-///   startTimer(timer16, 200, 0, @cb);
-///
-///   startTimer(dancetimer16, 500, 0, @dancer);
-///   taps16 = taps16 + 1;
-///   if (taps16 > 1) {
-///     stopTimer(timer16);
-///     handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-///   }
-/// }
-///
-/// func onRelease16() {
-///   if (taps16 == 1) {
-///     // standard mod-tap
-///     stopTimer(timer16);
-///     if (state16 == 0) {
-///       pressScanCode(SC_T);
-///       releaseScanCode(SC_T);
-///
-///     } else if (isScanCodePressed(SC_L_SHIFT)) {
-///       releaseScanCode(SC_L_SHIFT);
-///     }
-///   } else {
-///     stopTimer(timer16);
-///     handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-///     taps16 = 0;
-///   }
-/// }
+func onRelease15() {
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer15);
+    if (state15 == 0) {
+      handlePress(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+      handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+    } else if (isScanCodePressed(modifier15)) {
+      releaseScanCode(modifier15);
+    }
+  } else {
+    // if you are not in the alphanumeric layer, fall through
+    handleRelease(15, SK_WL | KEY_STENO, SC_3 | KEY_SHIFT, SC_F7, SC_L_CTRL, SC_L_CTRL);
+  }
+}
 
 // this is mod-tap
 const timer16 = 116;
-const dancetimer16 = 117;
 var state16 = 0;
-func cb() {
+const modifier16 = SC_L_SHIFT;
+func modtap16() {
   state16 = 1;
-  pressScanCode(SC_L_SHIFT);
+  pressScanCode(modifier16);
 }
 
 func onPress16() {
-  // TODO: only mod-tap if you are in the colemak layer
-  state16 = 0;
-  startTimer(timer16, 200, 0, @cb);
+  // only mod-tap if you are in the colemak layer
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state16 = 0;
+    startTimer(timer16, MODTAP_THRESHOLD, 0, @modtap16);
+  } else {
+    // if you are not in the alphanumeric layer, fall through
+    handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+  }
 }
 
 func onRelease16() {
-  // TODO: only mod-tap if you are in the colemak layer
-  stopTimer(timer16);
-  if (state16 == 0) {
-    handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer16);
+    if (state16 == 0) {
+      handlePress(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+      handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
+    } else if (isScanCodePressed(modifier16)) {
+      releaseScanCode(modifier16);
+    }
+  } else {
+    // if you are not in the alphanumeric layer, fall through
     handleRelease(16, SK_RL | KEY_STENO, SC_4 | KEY_SHIFT, SC_F8, SC_L_SHIFT, SC_L_SHIFT);
-
-  } else if (isScanCodePressed(SC_L_SHIFT)) {
-    releaseScanCode(SC_L_SHIFT);
   }
 }
 
@@ -2402,33 +2431,136 @@ func onRelease18() {
   handleRelease(18, SK_STAR4 | KEY_STENO, SC_6 | KEY_SHIFT, SC_NONE, SC_CONSUMER_VOLUME_DOWN, SC_NONE);
 }
 
-func onPress19() {
-  handlePress(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+// this is mod-tap
+const timer19 = 119;
+var state19 = 0;
+const modifier19 = SC_R_SHIFT;
+func modtap19() {
+  state19 = 1;
+  pressScanCode(modifier19);
 }
+
+func onPress19() {
+  // only mod-tap if you are in the colemak layer
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state19 = 0;
+    startTimer(timer19, MODTAP_THRESHOLD, 0, @modtap19);
+  } else {
+    // if you are not in the alphanumeric layer, fall through
+    handlePress(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+  }
+}
+
 func onRelease19() {
-  handleRelease(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer19);
+    if (state19 == 0) {
+      handlePress(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+      handleRelease(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+    } else if (isScanCodePressed(modifier19)) {
+      releaseScanCode(modifier19);
+    }
+  } else {
+    // if you are not in the alphanumeric layer, fall through
+    handleRelease(19, SK_RR | KEY_STENO, SC_7 | KEY_SHIFT, SC_L_SHIFT, SC_LEFT, SC_KP_4);
+  }
+}
+
+const timer20 = 120;
+var state20 = 0;
+const modifier20 = SC_R_CTRL;
+func modtap20() {
+  state20 = 1;
+  pressScanCode(modifier20);
 }
 
 func onPress20() {
-  handlePress(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state20 = 0;
+    startTimer(timer20, MODTAP_THRESHOLD, 0, @modtap20);
+  } else {
+    handlePress(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+  }
 }
+
 func onRelease20() {
-  handleRelease(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer20);
+    if (state20 == 0) {
+      handlePress(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+      handleRelease(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+    } else if (isScanCodePressed(modifier20)) {
+      releaseScanCode(modifier20);
+    }
+  } else {
+    // if you are not in the alphanumeric layer, fall through
+    handleRelease(20, SK_BR | KEY_STENO, SC_8 | KEY_SHIFT, SC_L_CTRL, SC_DOWN, SC_KP_5);
+  }
+}
+
+const timer21 = 121;
+var state21 = 0;
+const modifier21 = SC_R_ALT;
+func modtap21() {
+  state21 = 1;
+  pressScanCode(modifier21);
 }
 
 func onPress21() {
-  handlePress(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state21 = 0;
+    startTimer(timer21, MODTAP_THRESHOLD, 0, @modtap21);
+  } else {
+    handlePress(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+  }
 }
+
 func onRelease21() {
-  handleRelease(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer21);
+    if (state21 == 0) {
+      handlePress(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+      handleRelease(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+    } else if (isScanCodePressed(modifier21)) {
+      releaseScanCode(modifier21);
+    }
+  } else {
+    handleRelease(21, SK_GR | KEY_STENO, SC_9 | KEY_SHIFT, SC_L_ALT, SC_RIGHT, SC_KP_6);
+  }
+}
+
+
+const timer22 = 122;
+var state22 = 0;
+const modifier22 = SC_R_META;
+func modtap22() {
+  state22 = 1;
+  pressScanCode(modifier22);
 }
 
 func onPress22() {
-  handlePress(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    state22 = 0;
+    startTimer(timer22, MODTAP_THRESHOLD, 0, @modtap22);
+  } else {
+    handlePress(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+  }
 }
+
 func onRelease22() {
-  handleRelease(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+  if (layer == ALPHABETIC_LAYOUT_COLEMAK_DH_SAM) {
+    stopTimer(timer22);
+    if (state22 == 0) {
+      handlePress(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+      handleRelease(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+    } else if (isScanCodePressed(modifier22)) {
+      releaseScanCode(modifier22);
+    }
+  } else {
+    handleRelease(22, SK_SR | KEY_STENO, SC_0 | KEY_SHIFT, SC_L_META, SC_PAGE_DOWN, SC_KP_MINUS);
+  }
 }
+
 
 func onPress23() {
   handlePress(23, SK_ZR | KEY_STENO, SC_EQUAL | KEY_SHIFT, SC_NONE, SC_END, SC_KP_PLUS);

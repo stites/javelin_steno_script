@@ -113,13 +113,11 @@
 // | Steno  |   Z  |   X  |   C  |   D  |   V  |        |   K  |   H  | ,  < | .  > | /  ? |        |
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
 //           tap + tap-hold  | Esc  |  Ret | Tab  |  | Space| Bspc | Del  |
-//                           |  \   |   \  |  \   |  |      |      |  \   |
-//           Mod-tap layer:  | Media| Symb | Fun  |  |      |      | Nav  |
-//                           |  ZAP |      | ZAP  |  |      |      | TODO |
-//                           |->Fun |      |      |  |      |      | TODO |
+//                           |  \   |   \  |      |  |      |      |  \   |
+//           Mod-tap layer:  |  Fun | Symb |      |  |      |      |  Nav |
+//                           |      |      |      |  |      |      |      |
 //                           `--------------------'  `--------------------'
-//                                                      Spc    Bspc
-//                                                           (Sym->Del)
+//                                                      TODO:  Bspc repeat with tap-dance
 //                                                             '-> \ Nav with tap-dance
 //
 // The layout is selected by pressing LAYOUT on the Settings layer to rotate through the options.
@@ -2744,11 +2742,19 @@ func onRelease35() {
 
 // 4th row
 
+//           tap + tap-hold  | Esc  |  Ret | Tab  |  | Space| Bspc | Del  |
+//                           |  \   |   \  |      |  |      |   \  |      |
+//           Mod-tap layer:  | Fun  | Symb |      |  |      |  Nav |      |
+//                           `--------------------'  `--------------------'
+//                                                      Spc    Bspc
+//                                                             '-> \ Nav with tap-dance
+//
+
 // HOLD!!! need to define the media layer! this is currently a no-op
 const timer36 = 136;
 var state36 = 0;
 const prev_layer36 = ALPHABETIC_LAYER; // constant for now
-const modtap_layer36 = ALPHABETIC_LAYER; // fixme
+const modtap_layer36 = FUNCTION_MASK; // fixme
 func modtap36() {
   state36 = 1;
   setLayer(modtap_layer36);
@@ -2806,30 +2812,12 @@ func onRelease37() {
   }
 }
 
-const timer38 = 138;
-const prev_layer38 = ALPHABETIC_LAYER; // alpha layer constant for now
-const modtap_layer38 = FUNCTION_MASK;
-func modtap38() {
-  setLayer(layer | modtap_layer38);
-}
-
 func onPress38() {
-  layer_index_check();
-  if (layer_index == 0) {
-    startTimer(timer38, MODTAP_THRESHOLD, 0, @modtap38);
-  } else {
-    handlePress(38, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
-  }
+  handlePress(38, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
 }
 
 func onRelease38() {
-  layer_index_check();
-  if (layer_index == 0) {
-    stopTimer(timer38);
-    handlePressRelease(38, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
-  } else if (layer & modtap_layer38) {
-    setLayer(prev_layer38);
-  }
+  handleRelease(38, SC_NONE, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
 }
 
 func onPress39() {
@@ -2839,17 +2827,37 @@ func onRelease39() {
   handleRelease(39, SK_E | KEY_STENO, SC_ENTER, SC_NONE, SC_NONE, SC_SPACE);
 }
 
+
 func onPress40() {
   handlePress(40, SK_U | KEY_STENO, SC_DELETE, SC_NONE, SC_NONE, SC_KP_0);
 }
+
 func onRelease40() {
   handleRelease(40, SK_U | KEY_STENO, SC_DELETE, SC_NONE, SC_NONE, SC_KP_0);
 }
 
-var pressCount41;
-func onPress41() {
-  handlePress(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+const timer41 = 141;
+const prev_layer41 = ALPHABETIC_LAYER; // alpha layer constant for now
+const modtap_layer41 = NAV_MASK;
+func modtap41() {
+  setLayer(layer | modtap_layer41);
 }
+
+func onPress41() {
+  layer_index_check();
+  if (layer_index == 0) {
+    startTimer(timer41, MODTAP_THRESHOLD, 0, @modtap41);
+  } else {
+    handlePress(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+  }
+}
+
 func onRelease41() {
-  handleRelease(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+  layer_index_check();
+  if (layer_index == 0) {
+    stopTimer(timer41);
+    handlePressRelease(41, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+  } else if (layer & modtap_layer41) {
+    setLayer(prev_layer41);
+  }
 }

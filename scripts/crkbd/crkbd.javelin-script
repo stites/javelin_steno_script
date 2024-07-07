@@ -1917,8 +1917,8 @@ func drawSaturation() {
   drawBar(saturation);
 }
 
-func setLayer(value) {
-  releaseAll();
+
+func setLayerNoRelease(value) {
   if (HAS_BLE) stopTimer(TIMER_ID_PAIRING_HOLD);
   if (value & STENO_MASK) {
     wordCaps = 0;
@@ -1928,6 +1928,11 @@ func setLayer(value) {
   updateKeyRgb();
   updateUnderglowRgb();
   updateDisplay0();
+}
+
+func setLayer(value) {
+  releaseAll();
+  setLayerNoRelease(value);
 }
 
 func isModifierKey(key) var {
@@ -2757,7 +2762,7 @@ const prev_layer36 = ALPHABETIC_LAYER; // constant for now
 const modtap_layer36 = FUNCTION_MASK; // fixme
 func modtap36() {
   state36 = 1;
-  setLayer(modtap_layer36);
+  setLayerNoRelease(modtap_layer36);
 }
 
 func onPress36() {
@@ -2774,14 +2779,9 @@ func onRelease36() {
   layer_index_check();
   if (layer_index == 0) {
     stopTimer(timer36);
-    if (state36 == 0) {
-      handlePressRelease(36, SK_A | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
-    } else if (layer == modtap_layer36) {
-      setLayer(prev_layer36);
-    }
-  } else {
-    // if you are not in the alphanumeric layer, fall through
-    handleRelease(36, SK_A | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+    handlePressRelease(36, SK_A | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+  } else if (layer & modtap_layer36) {
+    setLayer(prev_layer36);
   }
 }
 
@@ -2789,7 +2789,7 @@ const timer37 = 137;
 const prev_layer37 = ALPHABETIC_LAYER; // alpha layer constant for now
 const modtap_layer37 = SYMBOL_MASK;
 func modtap37() {
-  setLayer(layer | modtap_layer37);
+  setLayerNoRelease(layer | modtap_layer37);
 }
 
 
@@ -2840,7 +2840,7 @@ const timer41 = 141;
 const prev_layer41 = ALPHABETIC_LAYER; // alpha layer constant for now
 const modtap_layer41 = NAV_MASK;
 func modtap41() {
-  setLayer(layer | modtap_layer41);
+  setLayerNoRelease(layer | modtap_layer41);
 }
 
 func onPress41() {

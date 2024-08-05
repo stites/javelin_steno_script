@@ -21,6 +21,7 @@ class ScriptByteCodeBuilder {
   late final List<String> sortedStrings;
   final stringTable = <String, int>{};
   var stringHashTableOffset = 0;
+  final data = <AstNode, int>{};
   final ScriptReachability reachability;
 
   Uint8List createByteCode(int buttonCount) {
@@ -48,14 +49,14 @@ class ScriptByteCodeBuilder {
   void _createInstructionList() {
     for (final function in module.functions.values) {
       if (function is! ScriptFunction) continue;
-      if (!reachability.functions.contains(function.name)) continue;
+      if (!reachability.functions.contains(function.functionName)) continue;
 
-      if (function != module.functions[function.name]) {
+      if (function != module.functions[function.functionName]) {
         throw Exception('Internal error - inconsistent function name');
       }
       // Set up placeholder instruction.
       final functionStart = FunctionStartInstruction(function);
-      functions[function.name] = functionStart;
+      functions[function.functionName] = functionStart;
       addInstruction(functionStart);
 
       // Add function instructions
@@ -87,6 +88,10 @@ class ScriptByteCodeBuilder {
     offset = startingOffset;
     for (final instruction in instructions) {
       offset += instruction.layoutFinalPass(offset);
+    }
+    for (final e in reachability.data.entries) {
+      data[e.key] = offset;
+      offset += e.value;
     }
     for (final string in sortedStrings) {
       stringTable[string] = offset;
@@ -128,6 +133,10 @@ class ScriptByteCodeBuilder {
         );
       }
       instruction.addByteCode(this);
+    }
+
+    for (final e in data.entries) {
+      _bytesBuilder.add(e.key.getData());
     }
 
     for (final string in sortedStrings) {

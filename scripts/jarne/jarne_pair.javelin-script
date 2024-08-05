@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------
-// Default Corne pair script.
+// Default Jarne pair script.
 //---------------------------------------------------------------------------
 
 const CONNECTION_NONE = 0;
@@ -44,7 +44,7 @@ const USE_STATUS_BAR = HAS_DISPLAY && HAS_BLE;
 
 //---------------------------------------------------------------------------
 //
-// Corne button layout:
+// Jarne button layout:
 //
 // Button indexes
 //

@@ -1,4 +1,7 @@
 import 'dart:collection';
+import 'dart:typed_data';
+
+import 'package:javelin_steno_script/src/ast.dart';
 
 import 'byte_code_builder.dart';
 import 'functions.dart';
@@ -76,7 +79,9 @@ enum ScriptOperatorOpcode {
   byteLookup(0x15, false),
   wordLookup(0x16, false),
   increment(0x17, false),
-  decrement(0x18, false);
+  decrement(0x18, false),
+  halfWordLookup(0x19, false),
+  ;
 
   const ScriptOperatorOpcode(int value, this.isBooleanResult)
       : value = value + 0x70; // ScriptOpcodeValue.operatorBegin.value
@@ -602,6 +607,58 @@ final class PushStringValueInstruction extends ScriptInstruction {
   final String value;
 }
 
+final class SetHalfWordFunctionDataValueInstruction extends ScriptInstruction {
+  SetHalfWordFunctionDataValueInstruction({
+    required this.value,
+    required this.valueOffset,
+    required this.functionName,
+  });
+
+  @override
+  int get byteCodeLength => 0;
+
+  @override
+  void addByteCode(ScriptByteCodeBuilder builder) {
+    final offset = builder.functions[functionName]?.offset;
+    if (offset == null) {
+      throw Exception('Internal error: failed lookup on data');
+    }
+
+    value[valueOffset] = offset & 0xff;
+    value[valueOffset + 1] = offset >> 8;
+  }
+
+  @override
+  String toString() => '  ((set_data offset $valueOffset -> $functionName))';
+
+  final Uint8List value;
+  final int valueOffset;
+  final String functionName;
+}
+
+final class PushDataValueInstruction extends ScriptInstruction {
+  PushDataValueInstruction(this.value);
+
+  @override
+  int get byteCodeLength => 3;
+
+  @override
+  void addByteCode(ScriptByteCodeBuilder builder) {
+    final offset = builder.data[value];
+    if (offset == null) {
+      throw Exception('Internal error: failed lookup on data value');
+    }
+    builder.addOpcode(ScriptOpcode.pushBytes2S);
+    builder.addByte(offset);
+    builder.addByte(offset >> 8);
+  }
+
+  @override
+  String toString() => '  push offset_of $value';
+
+  final AstNode value;
+}
+
 final class PushIntValueInstruction extends ScriptInstruction {
   PushIntValueInstruction(this.value);
 
@@ -743,10 +800,10 @@ final class FunctionStartInstruction extends ScriptInstruction {
   @override
   String toString() {
     if (function.numberOfParameters == 0 && function.numberOfLocals == 0) {
-      return '\n${function.name} (0x${offset.toRadixString(16)}):';
+      return '\n${function.functionName} (0x${offset.toRadixString(16)}):';
     } else {
       return '\n'
-          '${function.name} (0x${offset.toRadixString(16)}):'
+          '${function.functionName} (0x${offset.toRadixString(16)}):'
           '\n  enterFunction ${function.numberOfParameters} ${function.numberOfLocals - function.numberOfParameters}';
     }
   }

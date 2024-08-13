@@ -17,7 +17,7 @@
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|    +--------|
 // |Ctrl/Esc|  S2  |   K  |   W  |   R  |  *3  |        |   R  |   B  |   G  |   S  |   Z  |        |    |  '  "  |
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|    +--------|
-// | Alpha  |      |      |      |      |      |        |      |      |      |      |      |        |    |        |
+// |        |      |      |      |      |Alpha |        |      |      |      |      |      |        |    |        |
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'    ---------'
 //                           |  A   |  0   |      |  |   E  |   U  |  #2  |
 //                           `--------------------'  `--------------------'
@@ -622,8 +622,8 @@ const NAV_MASK = 8;
 const NUMPAD_MASK = 16;
 const TEMPORARY_QWERTY_MASK = 32;
 
-var layer = STENO_MASK; // default
-// var layer = ALPHABETIC_LAYER;
+// var layer = STENO_MASK; // default
+var layer = ALPHABETIC_LAYER;
 var pressCount = 0;
 var speed = 1;
 var hueSpread = 4;
@@ -2656,6 +2656,24 @@ func onPress28() {
 }
 func onRelease28() {
   handleRelease(28, SC_NONE, SC_R_BRACKET, SC_NONE, SC_NONE, SC_NONE);
+}
+
+func onPress29() {
+  layer_index_check();
+  if (layer == STENO_MASK) {
+    setLayer(ALPHABETIC_LAYER); // releases all
+  } else {
+    handlePress(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+  }
+}
+
+func onRelease29() {
+  layer_index_check();
+  if (layer == STENO_MASK) {
+    return; // should never get here because of the setLayer above
+  } else {
+    handlePressRelease(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+  }
 }
 
 func onPress29() {

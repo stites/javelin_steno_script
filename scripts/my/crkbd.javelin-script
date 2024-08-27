@@ -156,7 +156,7 @@
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
 // |        |  F11 | F12  | F13  | F14  | F15  |        | F16  | F17  | F18  | F19  | F20  |        |
 // |--------+------+------+------+------+------|        |------+------+------+------+------+--------|
-// |        |      |      |      |      |      |        |      |      |      |      |      |        |
+// |        |      |      |      |      |Steno |        |      |      |      |      |      |        |
 // `----------------------+--+---+--+---+--+---+--.  ,--+---+--+---+--+---+-------------------------'
 //                           |      |      |      |  |      |      |      |
 //                           `--------------------'  `--------------------'
@@ -1800,6 +1800,65 @@ func layer_index_check() {
     layer_index = 0;
   }
 }
+// func isAlpha() {
+//   layer_index_check();
+//   if (layer_index == 0 && (layer & ALPHABETIC_LAYER)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isSteno() {
+//   layer_index_check();
+//   if (layer_index == 6 && (layer & STENO_MASK)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isSymbol() {
+//   layer_index_check();
+//   if (layer_index == 5 && (layer & SYMBOL_MASK)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isFunction() {
+//   layer_index_check();
+//   if (layer_index == 4 && (layer & FUNCTION_MASK)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isNav() {
+//   layer_index_check();
+//   if (layer_index == 3 && (layer & NAV_MASK)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isNum() {
+//   layer_index_check();
+//   if (layer_index == 2 && (layer & NUMPAD_MASK)) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+// func isSettings() {
+//   layer_index_check();
+//   if (layer_index == 1 && isSettingsLayer()) {
+//     return 1;
+//   } else {
+//     return 0;
+//   }
+// }
+
+
+
 func drawBar(barValue) {
   if (!HAS_DISPLAY) return;
 
@@ -2660,8 +2719,8 @@ func onRelease28() {
 
 func onPress29() {
   layer_index_check();
-  if (layer == STENO_MASK) {
-    setLayer(ALPHABETIC_LAYER); // releases all
+  if ((layer_index == 4 && (layer & FUNCTION_MASK)) || (layer_index == 6 && (layer & STENO_MASK))) {
+    return; // do nothing until release;
   } else {
     handlePress(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
   }
@@ -2669,19 +2728,26 @@ func onPress29() {
 
 func onRelease29() {
   layer_index_check();
-  if (layer == STENO_MASK) {
-    return; // should never get here because of the setLayer above
+  // layer index, not mask, to ensure that setting keys don't get clobbered. setLayer releases all keys
+  if (layer_index == 4 && (layer & FUNCTION_MASK)) {
+    releaseAll();
+    setLayer(STENO_MASK);
   } else {
-    handlePressRelease(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+    if (layer_index == 6 && (layer & STENO_MASK)) {
+      setLayer(ALPHABETIC_LAYER);
+      releaseAll();
+    } else {
+      handlePressRelease(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
+    }
   }
 }
 
-func onPress29() {
-  handlePress(29, SC_NONE, SC_ENTER, SC_NONE, SC_NONE, SC_NONE);
-}
-func onRelease29() {
-  handleRelease(29, SC_NONE, SC_ENTER, SC_NONE, SC_NONE, SC_NONE);
-}
+// func onPress29() {
+//   handlePress(29, SC_NONE, SC_ENTER, SC_NONE, SC_NONE, SC_NONE);
+// }
+// func onRelease29() {
+//   handleRelease(29, SC_NONE, SC_ENTER, SC_NONE, SC_NONE, SC_NONE);
+// }
 
 func onPress30() {
   handlePress(30, SC_NONE, SC_SPACE, SC_NONE, SC_CONSUMER_MUTE, SC_NONE);

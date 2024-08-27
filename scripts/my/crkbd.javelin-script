@@ -2726,16 +2726,20 @@ func onPress29() {
   }
 }
 
+// assumed to initialize at 0. 1 is "in alpha". 2 is "in steno"
+var layerState29;
 func onRelease29() {
   layer_index_check();
   // layer index, not mask, to ensure that setting keys don't get clobbered. setLayer releases all keys
   if (layer_index == 4 && (layer & FUNCTION_MASK)) {
-    releaseAll();
     setLayer(STENO_MASK);
+    if (isButtonPressed(36)) {
+      layerState29 = 2; // in steno
+    }
   } else {
+    layerState29 = 1; // in non-steno
     if (layer_index == 6 && (layer & STENO_MASK)) {
       setLayer(ALPHABETIC_LAYER);
-      releaseAll();
     } else {
       handlePressRelease(29, SK_NUM2 | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_KP_DOT);
     }
@@ -2835,7 +2839,13 @@ func onRelease36() {
   layer_index_check();
   if (layer_index == 0 || (layer & STENO_MASK)) {
     stopTimer(timer36);
-    handlePressRelease(36, SK_A | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+    // FIXME hack for steno.
+    if (layerState29 == 2) {
+        layerState29 = 1; // only work temporarily
+        return;
+    } else {
+        handlePressRelease(36, SK_A | KEY_STENO, SC_NONE, SC_NONE, SC_NONE, SC_NONE);
+    }
   } else if (layer & modtap_layer36) {
     setLayerNoRelease(prev_layer36);
   }

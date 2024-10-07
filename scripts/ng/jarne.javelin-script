@@ -663,13 +663,18 @@ func activate1NoRelease() {
 }
 
 func activate2() {
-  clearPendingModTap();
+  // clearPendingModTap();
   setLayer(2, "layer_id: 262857896");
+}
+func activate2NoRelease() {
+  setLayerNoRelease(2, "layer_id: 262857896");
+  // if (isButtonPressed(37)) {
+  //   onPress37();
+  // }
 }
 
 func activate3() {
   setLayer(3, "layer_id: 41429312");
-
 }
 
 func activate3NoRelease() {
@@ -725,6 +730,8 @@ func deactivate0() {
 
 func deactivate1() {
   clearResolvedModTap();
+}
+func deactivate1NoClear() {
 }
 
 func deactivate2() {
@@ -4580,30 +4587,29 @@ func onRelease35_7() {
 func onPress36() {
   globalPress(36);
 
-  dispatchToLayer(@onPress36_0, @onPress36_1, @onPress36_2, 0, 0, 0, 0, @onPress36_7);
+  dispatchToLayer(@onPress36_0, @onPress36_1, @onPress36_2, 0, 0, @onPress36_5, 0, @onPress36_7);
 }
 func onRelease36() {
   globalRelease();
   handleModTapRelease(@modTapHandler36);
 
-  dispatchToLayer(@onRelease36_0, @onRelease36_1, @onRelease36_2, 0, 0, 0, 0, @onRelease36_7);
-  // Temp-QWERTY
+  dispatchToLayer(@onRelease36_0, @onRelease36_1, @onRelease36_2, 0, 0, @onRelease36_5, 0, @onRelease36_7);
+  // // Temp-QWERTY
 
-  // Returning here prevents the next sequence, SetLayer, from occurring.
-  if (isInReleaseAll()) {
-    return;
-  }
-  if (!wasSteno36) {
-    return;
-  }
-  wasSteno36 = 0;
+  // // Returning here prevents the next sequence, SetLayer, from occurring.
+  // if (isInReleaseAll()) {
+  //   return;
+  // }
+  // if (!wasSteno36) {
+  //   return;
+  // }
+  // wasSteno36 = 0;
 
-  deactivateGlobal();
-  deactivateDynamic();
-  activate0();
-  activateGlobal();
-  onRelease36_0();
-
+  // deactivateGlobal();
+  // deactivateDynamic();
+  // activate0();
+  // activateGlobal();
+  // onRelease36_0();
 }
 
 func onPress36_0() {
@@ -4631,26 +4637,41 @@ func onRelease36_0() {
 func modTapHandler36(action) {
   var resolvedLayerIndex = resolveLayerIndex();
   if (resolvedLayerIndex == 1) {
-    if (action == MODTAP_HANDLER_PRESS_HOLD) {
-      pressScanCodeButton(36, 0, 227 /* "⌘" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_HOLD) {
-      releaseScanCodeButton(227 /* "⌘" */);
+    if (action == MODTAP_HANDLER_PRESS_TAP) {
+      pressScanCodeButton(36, 0, 0x29 /* "esc" */, 0);
+    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+      releaseScanCodeButton(0x29 /* "esc" */);
+    } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
+      deactivateGlobal();
+      deactivate1();
+      activate5();
+      activateGlobal();
     }
   }
 }
 func onPress36_1() {
-  //pressScanCodeButton(36, 0, 227 /* "⌘" */, 0);
-  handleModTapPress(@modTapHandler36, 3, [[00 02 00 00 00 00 00 00]], 0);
+  // handleModTapPress(@modTapHandler36, 3, [[00 02 00 00 00 00 00 00]], 0);
+  // handleModTapPress(@modTapHandler36, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler36, 3, [[00 23 00 00 00 00 00 00]], MODTAP_LAYER_HOLD_TIME);
 }
 func onRelease36_1() {
-//  releaseScanCodeButton(227 /* "⌘" */);
 }
 
 func onPress36_2() {
-  pressScanCodeButton(36, 0, 227 /* "⌘" */, 0);
+  // pressScanCodeButton(36, 0, 227 /* "⌘" */, 0);
 }
 func onRelease36_2() {
-  releaseScanCodeButton(227 /* "⌘" */);
+  // releaseScanCodeButton(227 /* "⌘" */);
+}
+
+func onPress36_5() {
+}
+func onRelease36_5() {
+  deactivateGlobal();
+  deactivate5();
+  activate1NoRelease();
+  activateGlobal();
+  onRelease36_1();
 }
 
 func onPress36_7() {
@@ -4682,34 +4703,40 @@ func onRelease37_0() {
 func modTapHandler37(action) {
   var resolvedLayerIndex = resolveLayerIndex();
   if (resolvedLayerIndex == 1) {
-    if (action == MODTAP_HANDLER_PRESS_HOLD) {
-      pressScanCodeButton(37, 0, 226 /* "⌥" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_HOLD) {
-      releaseScanCodeButton(226 /* "⌥" */);
+    if (action == MODTAP_HANDLER_PRESS_TAP) {
+      pressScanCodeButton(37, 0, 40 /* "ret" */, 0);
+    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+      releaseScanCodeButton(40 /* "ret" */);
+    } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
+      deactivateGlobal();
+      deactivate1NoClear();
+      activate2NoRelease();
+      activateGlobal();
     }
   }
 }
 func onPress37_1() {
-  // pressScanCodeButton(37, 0, 226 /* "⌥" */, 0);
-  handleModTapPress(@modTapHandler37, 3, [[00 02 00 00 00 00 00 00]], 0);
-  checkWordCapsAndCapsLock();
+  // handleModTapPress(@modTapHandler37, 3, [[00 02 00 00 00 00 00 00]], 0);
+  // checkWordCapsAndCapsLock();
+  // handleModTapPress(@modTapHandler37, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);  // works
+  // handleModTapPress(@modTapHandler37, 3, [[00 23 00 00 00 00 00 00]], MODTAP_LAYER_HOLD_TIME); // doesn't work (maybe not in the same mod-tap group?)
+  handleModTapPress(@modTapHandler37,    1, [[00 03 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);  // works
 }
 func onRelease37_1() {
-  // releaseScanCodeButton(226 /* "⌥" */);
 }
 
 func onPress37_2() {
-  pressScanCodeButton(37, 0, 226 /* "⌥" */, 0);
 }
 func onRelease37_2() {
-  releaseScanCodeButton(226 /* "⌥" */);
+  clearPendingModTap(); // new
+  deactivateGlobal();
+  deactivate2();
+  activate1NoRelease();
+  activateGlobal();
+  onRelease37_1();
 }
 
 func onPress37_4() {
-  deactivateGlobal();
-  deactivate4();
-  activate6();
-  activateGlobal();
 }
 func onRelease37_4() {
 }
@@ -4717,11 +4744,11 @@ func onRelease37_4() {
 func onPress37_6() {
 }
 func onRelease37_6() {
-  deactivateGlobal();
-  deactivate6();
-  activate4();
-  activateGlobal();
-  onRelease37_4();
+//  deactivateGlobal();
+//  deactivate6();
+//  activate4();
+//  activateGlobal();
+//  onRelease37_4();
 }
 
 func onPress37_7() {
@@ -4734,13 +4761,13 @@ func onRelease37_7() {
 func onPress38() {
   globalPress(38);
 
-  dispatchToLayer(@onPress38_0, @onPress38_1, @onPress38_2, 0, @onPress38_4, 0, @onPress38_6, 0);
+  dispatchToLayer(@onPress38_0, @onPress38_1, @onPress38_2, @onPress38_3, 0, 0, @onPress38_6, 0);
 }
 func onRelease38() {
   globalRelease();
   handleModTapRelease(@modTapHandler38);
 
-  dispatchToLayer(@onRelease38_0, @onRelease38_1, @onRelease38_2, 0, @onRelease38_4, 0, @onRelease38_6, 0);
+  dispatchToLayer(@onRelease38_0, @onRelease38_1, @onRelease38_2, @onRelease38_3, 0, 0, @onRelease38_6, 0);
 }
 
 func onPress38_0() {
@@ -4748,132 +4775,52 @@ func onPress38_0() {
 func onRelease38_0() {
 }
 
-// var timer38_1;
-// var forceQwertySpace38;
-
 func modTapHandler38(action) {
   var resolvedLayerIndex = resolveLayerIndex();
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(38, 0, 44 /* "⎵" */, 0);
+      pressScanCodeButton(38, 0, 43 /* "tab" */, 0);
     } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(44 /* "⎵" */);
+      releaseScanCodeButton(43 /* "tab" */);
     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
       deactivateGlobal();
       deactivate1();
-      activate4NoRelease();
+      activate3NoRelease();
       activateGlobal();
     }
   }
 }
 
 func onPress38_1() {
-//  startTimer(104, 200, 0, @{
-//    if (layer != 1) return;
-//
-//    if (!isButtonPressed(38)) return;
-//
-//    //
-//    // This logic is used to set the layer when held
-//    if (!forceQwertySpace38) return;
-//    if (onPressScanCodeCallback == @tapSpace) {
-//      onPressScanCodeCallback = 0;
-//    }
-//
-//    deactivateGlobal();
-//    deactivate1();
-//    activate4();
-//    activateGlobal();
-//
-//  });
-//  if (!isInPressAll()) {
-//    timer38_1 = getTime();
-//  }
-//  @{
-//    //
-//    // This key has a bunch of extra logic to it to make it behave
-//    // reliably like a space bar during fast typing.
-//    //
-//    // * If pressed within 100ms of pressing another key, then it will
-//    //   be treated as a spacebar unless held for 150ms (Hold Trigger).
-//    //
-//    // * If pressed without any other key, it will immediately switch to
-//    //   the navigation layer, after which fuzzy layer logic will take
-//    //   over to prevent
-//
-//    // Suppress Layer Change if anything else was pressed in the last 200ms and it isn't temporary qwerty
-//    forceQwertySpace38 = !wasSteno24 && !isButtonPressed(37) && (getTime() - lastQwertyActionTimes[0] < 100);
-//    if (forceQwertySpace38) {
-//      clearPendingModTap();
-//
-//      // In this case, if another key is pressed, tap space.
-//      // In the hold trigger, this is removed.
-//      onPressScanCodeCallback = @tapSpace;
-//
-//      // Prevent SetLayer
-//      return;
-//    }
-//
-//    deactivateGlobal();
-//    deactivate1();
-//    activate4();
-//    activateGlobal();
-//    //
-//    startFuzzyLayer();
-//
-//  }();
   modTapLayerPossibility[4] = 1;
   handleModTapPress(@modTapHandler38, 3, [[00 23 00 00 00 00 00 00]], MODTAP_LAYER_HOLD_TIME);
 }
 func onRelease38_1() {
-  // stopTimer(104);
+}
 
-  // if (getTime() - timer38_1 <= 200) {
-  //   @{
-  //     //
-  //     // Prevent space being tapped after it's already been sent.
-  //     if (forceQwertySpace38 && onPressScanCodeCallback == 0) {
-  //       return;
-  //     }
-  //     if (onPressScanCodeCallback == @tapSpace) {
-  //       onPressScanCodeCallback = 0;
-  //     }
-  //     pressScanCodeButton(38, 0, 44 /* "⎵" */, 1);
-  //     releaseScanCodeButton(44 /* "⎵" */);
-
-  //   }();
-
+// var timer38_2;
+func onPress38_2() {
+  // if (!isInPressAll()) {
+  //   timer38_2 = getTime();
+  // }
+  // pressScanCodeButton(38, 0, 224 /* "⌃" */, 0);
+}
+func onRelease38_2() {
+  // releaseScanCodeButton(224 /* "⌃" */);
+  // if (getTime() - timer38_2 <= 200) {
+  //   pressScanCodeButton(38, 0, 44 /* "⎵" */, 1);
+  //   releaseScanCodeButton(44 /* "⎵" */);
   // }
 }
 
-var timer38_2;
-func onPress38_2() {
-  if (!isInPressAll()) {
-    timer38_2 = getTime();
-  }
-  pressScanCodeButton(38, 0, 224 /* "⌃" */, 0);
+func onPress38_3() {
 }
-func onRelease38_2() {
-  releaseScanCodeButton(224 /* "⌃" */);
-  if (getTime() - timer38_2 <= 200) {
-    pressScanCodeButton(38, 0, 44 /* "⎵" */, 1);
-    releaseScanCodeButton(44 /* "⎵" */);
-
-  }
-}
-
-func onPress38_4() {
-}
-func onRelease38_4() {
-  // //
-  // stopFuzzyLayerPreSetLayer();
+func onRelease38_3() {
   deactivateGlobal();
-  deactivate4();
+  deactivate3();
   activate1NoRelease();
   activateGlobal();
   onRelease38_1();
-  // //
-  // stopFuzzyLayerPostSetLayer();
 }
 
 func onPress38_6() {
@@ -4953,12 +4900,12 @@ func onRelease39_6() {
 func onPress40() {
   globalPress(40);
 
-  dispatchToLayer(@onPress40_0, @onPress40_1, @onPress40_2, @onPress40_3, 0, @onPress40_5, @onPress40_6, @onPress40_7);
+  dispatchToLayer(@onPress40_0, @onPress40_1, @onPress40_2, 0, @onPress40_4, @onPress40_5, @onPress40_6, @onPress40_7);
 }
 func onRelease40() {
   globalRelease();
 
-  dispatchToLayer(@onRelease40_0, @onRelease40_1, @onRelease40_2, @onRelease40_3, 0, @onRelease40_5, @onRelease40_6, @onRelease40_7);
+  dispatchToLayer(@onRelease40_0, @onRelease40_1, @onRelease40_2, 0, @onRelease40_4, @onRelease40_5, @onRelease40_6, @onRelease40_7);
 }
 
 func onPress40_0() {
@@ -4968,32 +4915,33 @@ func onRelease40_0() {
   releaseStenoKey(15 /* "U" */);
 }
 
-func modTapHandler40(action) {
-  var resolvedLayerIndex = resolveLayerIndex();
-  if (resolvedLayerIndex == 1) {
-    if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(40, 0, 41 /* "ret" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(41 /* "ret" */);
-    } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
-      deactivateGlobal();
-      deactivate1();
-      activate2();
-      activateGlobal();
-    }
-  } else if (resolvedLayerIndex == 4) {
-    if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(40, 0, 41 /* "ret" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(41 /* "ret" */);
-    }
-  }
-}
+// func modTapHandler40(action) {
+//   var resolvedLayerIndex = resolveLayerIndex();
+//   if (resolvedLayerIndex == 1) {
+//     if (action == MODTAP_HANDLER_PRESS_TAP) {
+//       // not one of those keys you hold for too long
+//       pressScanCodeButton(40, 0, 0x2a /* "bspc" */, 0);
+//       releaseScanCodeButton(0x2a /* "bspc" */);
+//     } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+//       // releaseScanCodeButton(0x2a /* "bspc" */);
+//     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
+//       deactivateGlobal();
+//       deactivate1();
+//       activate2();
+//       activateGlobal();
+//     }
+//   }
+// }
 func onPress40_1() {
-  modTapLayerPossibility[3] = 1;
-  handleModTapPress(@modTapHandler40, 5, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  // modTapLayerPossibility[3] = 1;
+  // modTapLayerPossibility[4] = 1;
+  // handleModTapPress(@modTapHandler40, 5, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  // handleModTapPress(@modTapHandler40, 1, [[00 01 00 00 00 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  // handleModTapPress(@modTapHandler40, 1, [[00 01 00 01 00 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  pressScanCodeButton(40, 0, 0x2a /* "bspc" */, 0);
 }
 func onRelease40_1() {
+  releaseScanCodeButton(0x2a /* "bspc" */);
 }
 
 func onPress40_2() {
@@ -5006,29 +4954,28 @@ func onRelease40_2() {
   onRelease40_1();
 }
 
-func onPress40_3() {
+func onPress40_4() {
   deactivateGlobal();
   deactivate3();
   activate5();
   activateGlobal();
 }
-func onRelease40_3() {
+func onRelease40_4() {
+  onRelease40_2();
 }
 
 func onPress40_5() {
 }
 func onRelease40_5() {
-  //
   // Since Settings -> Scripts -> deactivateLayer calls CallAllReleaseScripts,
   // this prevents infinite recursion.
   if (isInReleaseAll()) return;
 
   deactivateGlobal();
   deactivate5();
-  activate3();
+  activate4();
   activateGlobal();
-  onRelease40_3();
-
+  onRelease40_4();
 }
 
 func onPress40_6() {
@@ -5066,71 +5013,26 @@ func modTapHandler41(action) {
   var resolvedLayerIndex = resolveLayerIndex();
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(41, 0, 40 /* "↵" */, 0);
+      pressScanCodeButton(41, 0, 0x4c /* "delete" */, 0);
     } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(40 /* "↵" */);
+      releaseScanCodeButton(0x4c /* "delete" */);
     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
       deactivateGlobal();
       deactivate1();
-      activate3NoRelease();
+      activate4NoRelease();
       activateGlobal();
-    }
-  } else if (resolvedLayerIndex == 4) {
-    if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(41, 0, 40 /* "↵" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(40 /* "↵" */);
     }
   }
 }
 
-// var timer41_1;
-// var forceQwertyEnter41;
 func onPress41_1() {
-  // if (!isInPressAll()) {
-  //   timer41_1 = getTime();
-  // }
-  // @{
-  //   //
-  //   // Suppress Layer Change if anything else was pressed in the last 150ms and it isn't temporary qwerty
-  //   forceQwertyEnter41 = !wasSteno24 && !isButtonPressed(40) && (getTime() - lastQwertyActionTimes[0] < 150);
-  //   if (forceQwertyEnter41) {
-  //     clearPendingModTap();
-  //     pressScanCode(40 /* Enter */);
-  //     return;
-  //   }
-
-  //   deactivateGlobal();
-  //   deactivate1();
-  //   activate3();
-  //   activateGlobal();
-  //   //
-  //   startFuzzyLayer();
-
-  // }();
-
-  modTapLayerPossibility[3] = 1;
+  // modTapLayerPossibility[3] = 1;
   handleModTapPress(@modTapHandler41, 5, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
 }
 func onRelease41_1() {
-  // //
-  // if (forceQwertyEnter41) {
-  //   releaseScanCode(40 /* Enter */);
-  //   return;
-  // }
-
-  // if (getTime() - timer41_1 <= 200) {
-  //   pressScanCodeButton(41, 0, 40 /* "↵" */, 1);
-  //   releaseScanCodeButton(40 /* "↵" */);
-
-  // }
 }
 
 func onPress41_2() {
-  deactivateGlobal();
-  deactivate2();
-  activate5();
-  activateGlobal();
 }
 func onRelease41_2() {
 }
@@ -5138,41 +5040,22 @@ func onRelease41_2() {
 func onPress41_3() {
 }
 func onRelease41_3() {
-  // //
-  // stopFuzzyLayerPreSetLayer();
-  modTapLayerPossibility[3] = 0;
-  deactivateGlobal();
-  deactivate3();
-  activate1NoRelease();
-  activateGlobal();
-  onRelease41_1();
-  // //
-  // stopFuzzyLayerPostSetLayer();
-
 }
 
 func onPress41_4() {
-//  pressScanCodeButton(41, 0, 40 /* "↵" */, 0);
-  handleModTapPress(@modTapHandler41, 6, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
 }
 func onRelease41_4() {
-//  releaseScanCodeButton(40 /* "↵" */);
+  // modTapLayerPossibility[3] = 0;
+  deactivateGlobal();
+  deactivate4();
+  activate1NoRelease();
+  activateGlobal();
+  onRelease41_1();
 }
 
 func onPress41_5() {
 }
 func onRelease41_5() {
-  //
-  // Since Settings -> Scripts -> deactivateLayer calls CallAllReleaseScripts,
-  // this prevents infinite recursion.
-  if (isInReleaseAll()) return;
-
-  deactivateGlobal();
-  deactivate5();
-  activate2();
-  activateGlobal();
-  onRelease41_2();
-
 }
 
 func onPress41_6() {

@@ -41,9 +41,9 @@
  x | 34 |x X10        | /             56      | \        49 |             |                    |                 | /       56 |
    | 35 |             |                       |             |             |                    |                 |            |
 -------------------------------------------------------------------------------------------------------------------------------
-   | 36 |  A        8 | ESC       (lt->media) |             |             |                    |                 |            |
-   | 37 |  O        9 | RET  40  (lt->numsym) |             |             |                    |                 |            |
-   | 38 |x X1         | TAB  43   (lt->funct) |             |             |                    |                 |            |
+ x | 36 |  A        8 | ESC    (lt->settings) |             |             |                    |                 |            | confirm
+ x | 37 |  O        9 | RET  40  (lt->numsym) |             |             |                    |                 |            | confirm
+ x | 38 |x X1         | TAB  43   (lt->funct) |             |             |                    |                 |            |
  x | 39 |  E       14 | SPC  44               | RET      40 |             | SPC             44 |                 | SPC     44 |
- ? | 40 |  U       15 | BSPC 42  (lt->numsym) | xorL->5     | xorL->5     |                    | xor release ->1 | 0       98 | confirm
-   | 41 |x X2         | DEL        (lt->navi) | xorR->5     | xorR->5     | RET             41 | xor release ->1 | .       99 |
+ x | 40 |  U       15 | BSPC 42               |             |             |                    |                 | 0       98 | confirm
+ x | 41 |x X2         | DEL  0x4c  (lt->navi) |             |             | DEL           0x4c |                 | .       99 |

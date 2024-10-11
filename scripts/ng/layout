@@ -33,7 +33,7 @@
  x | 26 |x X4         | X             27      | `        53 |x F22        |                    | show:PaperTape  |            |
  x | 27 |x X5         | C              6      | [        47 |x F23        |                    | show:Strokes    |            |
  x | 28 |x X6         | D              7      | ]        48 |x F24        |                    |                 |            |
- x | 29 | (to COLMAK) | V             25      | RET      40 |             |                    |                 |            |
+ x | 29 | (to COLMAK) | V             25      | RET      40 |             |                    | (to Steno)      |            |
  x | 30 |x ST         | K             14      | SPC      44 |             | 🔇             210 |                 |            |
  x | 31 |x X7         | H             11      | '        52 |             |                    |                 | 1       89 |
  x | 32 |x X8         | ,             54      | -        86 |             |                    |                 | 2       90 |

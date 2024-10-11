@@ -4248,13 +4248,13 @@ func onRelease28_3() {
 func onPress29() {
   globalPress(29);
 
-  dispatchToLayer(@onPress29_0, @onPress29_1, @onPress29_2, 0, 0, 0, 0, 0);
+  dispatchToLayer(@onPress29_0, @onPress29_1, @onPress29_2, 0, 0, @onPress29_5, 0, 0);
 }
 func onRelease29() {
   globalRelease();
   handleModTapRelease(@modTapHandler29);
 
-  dispatchToLayer(@onRelease29_0, @onRelease29_1, @onRelease29_2, 0, 0, 0, 0, 0);
+  dispatchToLayer(@onRelease29_0, @onRelease29_1, @onRelease29_2, 0, 0, @onRelease29_5, 0, 0);
 }
 
 func onPress29_0() {
@@ -4290,6 +4290,15 @@ func onPress29_2() {
 func onRelease29_2() {
   releaseScanCodeButton(40 /* "ret" */);
 }
+func onPress29_5() {
+  deactivateGlobal();
+  deactivate5();
+  activate0();
+  activateGlobal();
+}
+func onRelease29_5() {
+}
+
 
 func onPress30() {
   globalPress(30);
@@ -4705,8 +4714,9 @@ func modTapHandler37(action) {
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
       pressScanCodeButton(37, 0, 40 /* "ret" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
       releaseScanCodeButton(40 /* "ret" */);
+    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+      // releaseScanCodeButton(40 /* "ret" */);
     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
       deactivateGlobal();
       deactivate1NoClear();
@@ -4780,8 +4790,9 @@ func modTapHandler38(action) {
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
       pressScanCodeButton(38, 0, 43 /* "tab" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
       releaseScanCodeButton(43 /* "tab" */);
+    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+      // releaseScanCodeButton(43 /* "tab" */);
     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
       deactivateGlobal();
       deactivate1();
@@ -5014,8 +5025,9 @@ func modTapHandler41(action) {
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
       pressScanCodeButton(41, 0, 0x4c /* "delete" */, 0);
-    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
       releaseScanCodeButton(0x4c /* "delete" */);
+    } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
+      // releaseScanCodeButton(0x4c /* "delete" */);
     } else if (action == MODTAP_HANDLER_PRESS_HOLD) {
       deactivateGlobal();
       deactivate1();

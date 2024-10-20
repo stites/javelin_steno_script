@@ -111,6 +111,7 @@ func clearPendingModTap() {
 }
 
 func clearResolvedModTap() {
+  // pressScanCode(37); releaseScanCode(37 /* "8" */);
   for (var i = 0; i < modTapDataCount;) {
     var base = i * MODTAP_DATA_LENGTH;
     var flags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
@@ -134,6 +135,9 @@ func clearResolvedModTap() {
 func removeModTapIndex(i) {
   // Safety -- should never happen.
   if (modTapDataCount == 0) return;
+
+  // pressScanCode(38); releaseScanCode(38 /* "9" */);
+  // pressScanCode(i + 8); releaseScanCode(i + 8);
 
   modTapDataCount = modTapDataCount - 1;
   var end = modTapDataCount * MODTAP_DATA_LENGTH;
@@ -161,7 +165,7 @@ func areAllModTapEntriesResolved() var {
 }
 
 func handleModTapPress(handler, group, layerFlagsList, holdTime) {
-  // pressScanCode(10); releaseScanCode(10 /* "G" */);
+  // pressScanCode(7); releaseScanCode(7 /* "D" */); // 1
   // Shouldn't happen, but for safety.
   if (modTapDataCount >= MODTAP_ENTRY_COUNT) {
       return;
@@ -176,6 +180,7 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
 
   if (isInPressAll() && (flags & MODTAP_FLAG_LAYER_CHANGE) == 0) return;
   if (flags == MODTAP_FLAG_TAP) {
+    // pressScanCode(6); releaseScanCode(6 /* "C" */);
     // If group is same as any unresolved mod, then resolve them to tap.
     // If it has already been resolved to hold, release and mark as ignore.
     // This also takes care of the case where there are no entries.
@@ -190,6 +195,7 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
           entryHandler(MODTAP_HANDLER_RELEASE_HOLD);
           continue;
         } else if (state == MODTAP_STATE_UNRESOLVED) {
+          /// I think it's happening here???
           modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = entryFlags | MODTAP_STATE_RESOLVED_TAP;
           entryHandler(MODTAP_HANDLER_PRESS_TAP);
         }
@@ -204,23 +210,25 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
     }
   } else if (flags == MODTAP_FLAG_HOLD) {
     handler(MODTAP_HANDLER_PRESS_HOLD);
+    // pressScanCode(5); releaseScanCode(5 /* "B" */);
     flags = flags | MODTAP_STATE_RESOLVED_HOLD;
   } else {
     // If another group has been resolved to hold, then tap immediately.
     for (var i = 0; i < modTapDataCount; i = i + 1) {
       var base = i * MODTAP_DATA_LENGTH;
       // if (modTapData[base + MODTAP_DATA_OFFSET_GROUP] != 0) {
-      //   pressScanCode(29); releaseScanCode(29 /* "Z" */);
+      //   // pressScanCode(29); releaseScanCode(29 /* "Z" */);
       // }
       // if ((modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
-      //   pressScanCode(8 ); releaseScanCode(8  /* "E" */);
+      //   // pressScanCode(8 ); releaseScanCode(8  /* "E" */);
       // }
       // if ((modTapData[base + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_RESOLVED_HOLD) {
-      //   pressScanCode(9 ); releaseScanCode(9  /* "F" */);
+      //   // pressScanCode(9 ); releaseScanCode(9  /* "F" */);
       // }
       if (modTapData[base + MODTAP_DATA_OFFSET_GROUP] != 0 &&
           (modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0 &&
           (modTapData[base + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_RESOLVED_HOLD) {
+        // pressScanCode(29); releaseScanCode(29 /* "Z" */);
         handler(MODTAP_HANDLER_PRESS_TAP);
         flags = flags | MODTAP_STATE_RESOLVED_TAP;
         break;
@@ -233,7 +241,7 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
 }
 
 func handleModTapRelease(handler) {
-  // pressScanCode(29); releaseScanCode(29 /* "Z" */);
+  // // pressScanCode(8); releaseScanCode(8 /* "E" */);  // 4
   var i = findModTapIndex(handler);
 
   // If handler is not in list, do nothing.
@@ -254,39 +262,46 @@ func handleModTapRelease(handler) {
     }
     return;
   }
-  // pressScanCode(8 ); releaseScanCode(8  /* "E" */);
+  // // pressScanCode(29); releaseScanCode(29 /* "Z" */);
   // Mark the handler as released.
   modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_FLAG_RELEASED;
 
   for (i = 0; i < modTapDataCount;) {
+    // pressScanCode(11); releaseScanCode(11 /* "H" */);
     base = i * MODTAP_DATA_LENGTH;
     flags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
     state = flags & MODTAP_FLAG_STATE;
     var entryHandler = modTapData[base + MODTAP_DATA_OFFSET_HANDLER];
     if (flags & MODTAP_FLAG_RELEASED) {
-      // pressScanCode(9 ); releaseScanCode(9  /* "F" */);
+      // pressScanCode(23); releaseScanCode(23 /* "T" */);
       removeModTapIndex(i);
       if (state == MODTAP_STATE_UNRESOLVED) {
+        // pressScanCode(30); releaseScanCode(30 /* "1" */);
         entryHandler(MODTAP_HANDLER_PRESS_TAP);
         entryHandler(MODTAP_HANDLER_RELEASE_TAP);
       } else if (state == MODTAP_STATE_RESOLVED_TAP) {
+        // pressScanCode(31); releaseScanCode(31 /* "2" */);
         entryHandler(MODTAP_HANDLER_RELEASE_TAP);
       } else if (state == MODTAP_STATE_RESOLVED_HOLD) {
+        // pressScanCode(32); releaseScanCode(32 /* "3" */);
         entryHandler(MODTAP_HANDLER_RELEASE_HOLD);
       }
       continue;
     }
 
     if((modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
+      // pressScanCode(20); releaseScanCode(20 /* "Q" */);
       updateModTapTimer();
       return;
     }
 
     if (state == MODTAP_STATE_RESOLVED_HOLD) {
+      // pressScanCode(26); releaseScanCode(26 /* "W" */);
       removeModTapIndex(i);
       entryHandler(MODTAP_HANDLER_RELEASE_HOLD);
       continue;
     } else if (state == MODTAP_STATE_UNRESOLVED) {
+      // pressScanCode(27); releaseScanCode(27 /* "X" */);
       modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_TAP;
       entryHandler(MODTAP_HANDLER_PRESS_TAP);
     }
@@ -295,6 +310,7 @@ func handleModTapRelease(handler) {
 }
 
 func findFirstUnresolvedModTapEntry() var {
+  // pressScanCode(9); releaseScanCode(9 /* "F" */); // 3
   var layerIndex = resolveLayerIndex();
   for (var i = 0; i < modTapDataCount; i = i + 1) {
     var base = i * MODTAP_DATA_LENGTH;
@@ -312,6 +328,7 @@ func findFirstUnresolvedModTapEntry() var {
 func updateModTapTimer() {
   var i = findFirstUnresolvedModTapEntry();
   if (i == -1)  {
+    // pressScanCode(10); releaseScanCode(10 /* "G" */); // 2
     stopTimer(TIMER_ID_MODTAP);
   } else {
     var delay = modTapData[i * MODTAP_DATA_LENGTH + MODTAP_DATA_OFFSET_HOLD_TRIGGER_TIME] - getTime();
@@ -367,6 +384,7 @@ func updateModTap() {
       modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_TAP;
       handler(MODTAP_HANDLER_PRESS_TAP);
       if (flags & MODTAP_FLAG_RELEASED) {
+        // pressScanCode(53); releaseScanCode(53);  /* ` */
         removeModTapIndex(i);
         handler(MODTAP_HANDLER_RELEASE_TAP);
       } else {
@@ -689,7 +707,6 @@ func activate0() {
 
 func activate1() {
   setLayer(1, "layer_id: 1128808786");
-
 }
 
 func activate1NoRelease() {
@@ -3889,19 +3906,19 @@ func onRelease23() {
 }
 
 func onPress23_0() {
-  pressStenoKeyButton(25 /* "-Z" */);
+  // pressStenoKeyButton(25 /* "-Z" */);
 }
 func onRelease23_0() {
-  releaseStenoKey(25 /* "-Z" */);
+  // releaseStenoKey(25 /* "-Z" */);
 }
 
 func modTapHandler23(action) {
   var resolvedLayerIndex = resolveLayerIndex();
   if (resolvedLayerIndex == 1) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
-      pressScanCodeButton(23, 0, 52 /* "'" */, 0);
+      pressScanCodeButton(23, 0, 40 /* "ret" */, 0);
     } else if (action == MODTAP_HANDLER_RELEASE_TAP) {
-      releaseScanCodeButton(52 /* "'" */);
+      releaseScanCodeButton(40 /* "ret" */);
     }
   } else if (resolvedLayerIndex == 4) {
     if (action == MODTAP_HANDLER_PRESS_TAP) {
@@ -3912,18 +3929,18 @@ func modTapHandler23(action) {
   }
 }
 func onPress23_1() {
-  // pressScanCodeButton(23, 0, 52 /* "'" */, 0);
+  // pressScanCodeButton(23, 0, 40 /* "ret" */, 0);
   handleModTapPress(@modTapHandler23, 0x01, [[00 01 00 00 00 00 00 00]], 0);
 }
 func onRelease23_1() {
-//  releaseScanCodeButton(52 /* "'" */);
+//  releaseScanCodeButton(40 /* "ret" */);
 }
 
 func onPress23_2() {
-  pressScanCodeButton(23, 0, 46 /* "=" */, 0);
+  // pressScanCodeButton(23, 0, 46 /* "=" */, 0);
 }
 func onRelease23_2() {
-  releaseScanCodeButton(46 /* "=" */);
+  // releaseScanCodeButton(46 /* "=" */);
 }
 
 func onPress23_4() {
@@ -4387,13 +4404,13 @@ func onRelease30_4() {
 func onPress31() {
   globalPress(31);
 
-  dispatchToLayer(0, @onPress31_1, @onPress31_2, 0, 0, 0, @onPress31_6, 0);
+  dispatchToLayer(0, @onPress31_1, @onPress31_2, 0, @onPress31_4, 0, @onPress31_6, 0);
 }
 func onRelease31() {
   globalRelease();
   handleModTapRelease(@modTapHandler31);
 
-  dispatchToLayer(0, @onRelease31_1, @onRelease31_2, 0, 0, 0, @onRelease31_6, 0);
+  dispatchToLayer(0, @onRelease31_1, @onRelease31_2, 0, @onRelease31_4, 0, @onRelease31_6, 0);
 }
 
 func modTapHandler31(action) {
@@ -4415,11 +4432,19 @@ func onRelease31_1() {
 }
 
 func onPress31_2() {
-  pressScanCodeButton(31, 0, 52 /* "'" */, 0);
+  pressScanCodeButton(31, 0, 40 /* "ret" */, 0);
 }
 func onRelease31_2() {
-  releaseScanCodeButton(52 /* "'" */);
+  releaseScanCodeButton(40 /* "ret" */);
 }
+
+func onPress31_4() {
+  pressScanCodeButton(31, 0, 0x4a /* "home" */, 0);
+}
+func onRelease31_4() {
+  releaseScanCodeButton(0x4a /* "home" */);
+}
+
 
 func onPress31_6() {
   pressScanCodeButton(31, 0, 89 /* "1" */, 0);
@@ -4431,13 +4456,13 @@ func onRelease31_6() {
 func onPress32() {
   globalPress(32);
 
-  dispatchToLayer(0, @onPress32_1, @onPress32_2, 0, 0, 0, @onPress32_6, 0);
+  dispatchToLayer(0, @onPress32_1, @onPress32_2, 0, @onPress32_4, 0, @onPress32_6, 0);
 }
 func onRelease32() {
   globalRelease();
   handleModTapRelease(@modTapHandler32);
 
-  dispatchToLayer(0, @onRelease32_1, @onRelease32_2, 0, 0, 0, @onRelease32_6, 0);
+  dispatchToLayer(0, @onRelease32_1, @onRelease32_2, 0, @onRelease32_4, 0, @onRelease32_6, 0);
 }
 
 func modTapHandler32(action) {
@@ -4465,6 +4490,14 @@ func onRelease32_2() {
   releaseScanCodeButton(86 /* "-" */);
 }
 
+func onPress32_4() {
+  pressScanCodeButton(32, 0, 0x4e /* "pgdn" */, 0);
+}
+func onRelease32_4() {
+  releaseScanCodeButton(0x4e /* "pgdn" */);
+}
+
+
 func onPress32_6() {
   pressScanCodeButton(32, 0, 90 /* "2" */, 0);
 }
@@ -4475,13 +4508,13 @@ func onRelease32_6() {
 func onPress33() {
   globalPress(33);
 
-  dispatchToLayer(0, @onPress33_1, @onPress33_2, 0, 0, 0, @onPress33_6, 0);
+  dispatchToLayer(0, @onPress33_1, @onPress33_2, 0, @onPress33_4, 0, @onPress33_6, 0);
 }
 func onRelease33() {
   globalRelease();
   handleModTapRelease(@modTapHandler33);
 
-  dispatchToLayer(0, @onRelease33_1, @onRelease33_2, 0, 0, 0, @onRelease33_6, 0);
+  dispatchToLayer(0, @onRelease33_1, @onRelease33_2, 0, @onRelease33_4, 0, @onRelease33_6, 0);
 }
 
 func modTapHandler33(action) {
@@ -4509,6 +4542,14 @@ func onRelease33_2() {
   releaseScanCodeButton(46 /* "=" */);
 }
 
+func onPress33_4() {
+  pressScanCodeButton(33, 0, 0x4b /* "pgup" */, 0);
+}
+func onRelease33_4() {
+  releaseScanCodeButton(0x4b /* "pgup" */);
+}
+
+
 func onPress33_6() {
   pressScanCodeButton(33, 0, 91 /* "3" */, 0);
 }
@@ -4519,13 +4560,13 @@ func onRelease33_6() {
 func onPress34() {
   globalPress(34);
 
-  dispatchToLayer(0, @onPress34_1, @onPress34_2, 0, 0, 0, @onPress34_6, 0);
+  dispatchToLayer(0, @onPress34_1, @onPress34_2, 0, @onPress34_4, 0, @onPress34_6, 0);
 }
 func onRelease34() {
   globalRelease();
   handleModTapRelease(@modTapHandler34);
 
-  dispatchToLayer(0, @onRelease34_1, @onRelease34_2, 0, 0, 0, @onRelease34_6, 0);
+  dispatchToLayer(0, @onRelease34_1, @onRelease34_2, 0, @onRelease34_4, 0, @onRelease34_6, 0);
 }
 
 func modTapHandler34(action) {
@@ -4551,6 +4592,13 @@ func onPress34_2() {
 }
 func onRelease34_2() {
   releaseScanCodeButton(49 /* "\" */);
+}
+
+func onPress34_4() {
+  pressScanCodeButton(34, 0, 0x4d /* "end" */, 0);
+}
+func onRelease34_4() {
+  releaseScanCodeButton(0x4d /* "end" */);
 }
 
 func onPress34_6() {

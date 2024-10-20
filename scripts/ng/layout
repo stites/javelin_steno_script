@@ -47,3 +47,9 @@
  x | 39 |  4  |  E       14 | SPC  44               | RET      40 |             | SPC             44 |                 | SPC     44 |
  x | 40 |     |  U       15 | BSPC 42               |             |             |                    |                 | 0       98 | confirm
  x | 41 |  8  |x X2         | DEL  0x4c  (lt->navi) |             |             | DEL           0x4c |                 | .       99 |
+
+things that are broken:
+C-a
+C-r
+C-t
+M-s

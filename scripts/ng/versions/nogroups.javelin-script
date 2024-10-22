@@ -2063,45 +2063,57 @@ func reset_modtap_timers() {
 const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
 const LAYERTAP_THRESHOLD = 200; // milliseconds
 
-const MODTAP_STATE_MET_L = 1;
-const MODTAP_STATE_ALT_L = 2;
-const MODTAP_STATE_CTR_L = 4;
-const MODTAP_STATE_SFT_L = 8;
-const MODTAP_STATE_SFT_R = 16;
-const MODTAP_STATE_CTR_R = 32;
-const MODTAP_STATE_ALT_R = 64;
-const MODTAP_STATE_MET_R = 128;
+// modtap state indicies
+// const MODTAP_STATE_MET_L = 1;
+// const MODTAP_STATE_ALT_L = 2;
+// const MODTAP_STATE_CTR_L = 4;
+// const MODTAP_STATE_SFT_L = 8;
+// const MODTAP_STATE_SFT_R = 16;
+// const MODTAP_STATE_CTR_R = 32;
+// const MODTAP_STATE_ALT_R = 64;
+// const MODTAP_STATE_MET_R = 128;
+// // `pressed_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when a press to the relevant key is pressed.
+// // This might turn into a high-resolution guard for chords, but for now it is only used to check the state of the mod-tap.
+// var pressed_modtap_state = 0;
+// // `held_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when the corresponding key is holding for the modifier.
+// var held_modtap_state = 0;
+const MODTAP_STATE_MET_L = 0;
+const MODTAP_STATE_ALT_L = 1;
+const MODTAP_STATE_CTR_L = 2;
+const MODTAP_STATE_SFT_L = 3;
+const MODTAP_STATE_SFT_R = 4;
+const MODTAP_STATE_CTR_R = 5;
+const MODTAP_STATE_ALT_R = 6;
+const MODTAP_STATE_MET_R = 7;
 
-// `pressed_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when a press to the relevant key is pressed.
-// This might turn into a high-resolution guard for chords, but for now it is only used to check the state of the mod-tap.
-var pressed_modtap_state = 0;
-
-// `held_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when the corresponding key is holding for the modifier.
-var held_modtap_state = 0;
+var pressed_modtap_state[8];
+var held_modtap_state[8];
 
 func reset_modtap_state() {
-  held_modtap_state    = 0;
-  pressed_modtap_state = 0;
+  for (var i; i < 8; i = i + 1) {
+    held_modtap_state[i]    = 0;
+    pressed_modtap_state[i] = 0;
+  }
   reset_modtap_timers();
 }
-func clear_modtap_state(ix) {
-  held_modtap_state    = held_modtap_state    & (~ ix);
-  pressed_modtap_state = pressed_modtap_state & (~ ix);
+func clear_modtap_state(i) {
+  held_modtap_state[i]    = 0;
+  pressed_modtap_state[i] = 0;
 }
-func set_held(ix) {
-  held_modtap_state = held_modtap_state & ix;
+func set_held(i) {
+  held_modtap_state[i]    = 1;
 }
-func set_pressed(ix) {
-  pressed_modtap_state = pressed_modtap_state & ix;
+func set_pressed(i) {
+  pressed_modtap_state[i] = 1;
 }
-func is_held(ix) var {
-  return held_modtap_state & ix;
+func is_held(i) var {
+  return held_modtap_state[i] == 1;
 }
-func was_pressed(ix) var {
-  return pressed_modtap_state & ix;
+func was_pressed(i) var {
+  return pressed_modtap_state[i] == 1;
 }
-func is_tap(ix) var {
-  return was_pressed(ix) && (! is_held(ix));
+func is_tap(i) var {
+  return was_pressed(i) && (! is_held(i));
 }
 
 // BLE stuff
@@ -3065,8 +3077,8 @@ func onRelease15() {
     releaseStenoKey(5 /* "W-" */);
   } else if (resolvedLayer == 1) {
     if ( is_tap(modifier15_ix) ) {
-      pressScanCodeButton(15, 0, 21 /* "R" */, 0);
-      releaseScanCodeButton(21 /* "R" */);
+      pressScanCodeButton(15, 0, 22 /* "S" */, 0);
+      releaseScanCodeButton(22 /* "S" */);
     }
   } else if (resolvedLayer == 2) {
     releaseScanCodeButton(modifier15);

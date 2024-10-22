@@ -14,9 +14,7 @@ const MODTAP_STATE_UNRESOLVED = 0;
 const MODTAP_STATE_RESOLVED_HOLD = 8;
 const MODTAP_STATE_RESOLVED_TAP = 16;
 
-const MODTAP_DEFAULT_HOLD_TIME = 180;
-const MODTAP_SHIFT_HOLD_TIME = 120;
-const MODTAP_LAYER_HOLD_TIME = 180;
+const MODTAP_HOLD_TIME = 150;
 
 const TIMER_ID_MODTAP = 99;
 
@@ -36,8 +34,8 @@ const MODTAP_DATA_LENGTH = 5;
 
 const MODTAP_ENTRY_COUNT = 12;
 
-var modTapDataCount;
 var modTapData[MODTAP_DATA_LENGTH * MODTAP_ENTRY_COUNT];
+var modTapDataCount;
 
 // 0 = steno
 // 1 = qwerty
@@ -51,14 +49,14 @@ var modTapLayerPossibility[8];
 
 // Group is used to identify which keys can work together for mods and taps.
 // This configuration uses: Group 1 = left hand, Group 2 = right, group 3 = shifts + thumb mods, 4 = space/nav, 5 = right space, 6 = enter/function
-func addModTapEntry(handler, group, flags, layerFlagsList, holdTime) {
+func addModTapEntry(handler, group, flags, layerFlagsList) {
   var base = modTapDataCount * MODTAP_DATA_LENGTH;
   modTapDataCount = modTapDataCount + 1;
   modTapData[base + MODTAP_DATA_OFFSET_HANDLER] = handler;
   modTapData[base + MODTAP_DATA_OFFSET_GROUP] = group;
   modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags;
   modTapData[base + MODTAP_DATA_OFFSET_LAYER_FLAGS_LIST] = layerFlagsList;
-  modTapData[base + MODTAP_DATA_OFFSET_HOLD_TRIGGER_TIME] = getTime() + holdTime;
+  modTapData[base + MODTAP_DATA_OFFSET_HOLD_TRIGGER_TIME] = getTime() + MODTAP_HOLD_TIME;
 }
 
 func findModTapIndex(handler) var {
@@ -141,12 +139,7 @@ func areAllModTapEntriesResolved() var {
 	return 1;
 }
 
-func handleModTapPress(handler, group, layerFlagsList, holdTime) {
-  // Shouldn't happen, but for safety.
-  if (modTapDataCount >= MODTAP_ENTRY_COUNT) {
-      return;
-  }
-
+func handleModTapPress(handler, group, layerFlagsList) {
   var flags = layerFlagsList[resolveLayerIndex()];
   for (var i = 0; i < 8; i = i + 1) {
     if (modTapLayerPossibility[i]) {
@@ -199,7 +192,12 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
 		}
 	}
 
-  addModTapEntry(handler, group, flags, layerFlagsList, holdTime);
+  // Shouldn't happen, but for safety.
+  if (modTapDataCount >= MODTAP_ENTRY_COUNT) {
+      return;
+  }
+
+  addModTapEntry(handler, group, flags, layerFlagsList);
   updateModTapTimer();
 }
 
@@ -247,7 +245,6 @@ func handleModTapRelease(handler) {
 
     var localGroup = modTapData[base + MODTAP_DATA_OFFSET_GROUP];
 		if(localGroup && localGroup != group) {
-      updateModTapTimer();
 			return;
 		}
 
@@ -1966,7 +1963,7 @@ func init() {
   updateBoardPower();
   updateScreenSaverTimer();
 
-  activate1();
+  activate0();
   activateGlobal();
 }
 
@@ -2001,7 +1998,7 @@ func modTapHandler0(action) {
 
 func onPress0_1() {
   // pressScanCodeButton(0, 0, 43 /* "⇥" */, 0);
-	handleModTapPress(@modTapHandler0, 1, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler0, 1, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease0_1() {
   // releaseScanCodeButton(43 /* "⇥" */);
@@ -2062,7 +2059,7 @@ func modTapHandler1(action) {
 
 func onPress1_1() {
   // pressScanCodeButton(1, 0, 20 /* "Q" */, 0);
-	handleModTapPress(@modTapHandler1, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler1, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease1_1() {
   // releaseScanCodeButton(20 /* "Q" */);
@@ -2077,7 +2074,7 @@ func onRelease1_2() {
 
 func onPress1_3() {
   // pressScanCodeButton(1, 0, 66 /* "F9" */, 0);
-	handleModTapPress(@modTapHandler1, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler1, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease1_3() {
   // releaseScanCodeButton(66 /* "F9" */);
@@ -2141,7 +2138,7 @@ func modTapHandler2(action) {
 
 func onPress2_1() {
   // pressScanCodeButton(2, 0, 26 /* "W" */, 0);
-	handleModTapPress(@modTapHandler2, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler2, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease2_1() {
   // releaseScanCodeButton(26 /* "W" */);
@@ -2156,7 +2153,7 @@ func onRelease2_2() {
 
 func onPress2_3() {
 //  pressScanCodeButton(2, 0, 67 /* "F10" */, 0);
-	handleModTapPress(@modTapHandler2, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler2, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease2_3() {
 //  releaseScanCodeButton(67 /* "F10" */);
@@ -2220,7 +2217,7 @@ func modTapHandler3(action) {
 
 func onPress3_1() {
 // pressScanCodeButton(3, 0, 8 /* "E" */, 0);
-	handleModTapPress(@modTapHandler3, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler3, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease3_1() {
   // releaseScanCodeButton(8 /* "E" */);
@@ -2235,7 +2232,7 @@ func onRelease3_2() {
 
 func onPress3_3() {
   // pressScanCodeButton(3, 0, 68 /* "F11" */, 0);
-	handleModTapPress(@modTapHandler3, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler3, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease3_3() {
   // releaseScanCodeButton(68 /* "F11" */);
@@ -2298,7 +2295,7 @@ func modTapHandler4(action) {
 }
 func onPress4_1() {
 //  pressScanCodeButton(4, 0, 21 /* "R" */, 0);
-	handleModTapPress(@modTapHandler4, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler4, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease4_1() {
 //  releaseScanCodeButton(21 /* "R" */);
@@ -2313,7 +2310,7 @@ func onRelease4_2() {
 
 func onPress4_3() {
   // pressScanCodeButton(4, 0, 69 /* "F12" */, 0);
-	handleModTapPress(@modTapHandler4, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler4, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease4_3() {
   // releaseScanCodeButton(69 /* "F12" */);
@@ -2376,7 +2373,7 @@ func modTapHandler5(action) {
 }
 func onPress5_1() {
 // pressScanCodeButton(5, 0, 23 /* "T" */, 0);
-	handleModTapPress(@modTapHandler5, 1, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler5, 1, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease5_1() {
   // releaseScanCodeButton(23 /* "T" */);
@@ -2391,7 +2388,7 @@ func onRelease5_2() {
 
 func onPress5_4() {
 //  pressScanCodeButton(5, 0, 222 /* "🔆" */, 0);
-	handleModTapPress(@modTapHandler5, 1, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler5, 1, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease5_4() {
 //  releaseScanCodeButton(222 /* "🔆" */);
@@ -2444,7 +2441,7 @@ func modTapHandler6(action) {
 }
 func onPress6_1() {
   // pressScanCodeButton(6, 0, 28 /* "Y" */, 0);
-	handleModTapPress(@modTapHandler6, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler6, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease6_1() {
   // releaseScanCodeButton(28 /* "Y" */);
@@ -2459,7 +2456,7 @@ func onRelease6_2() {
 
 func onPress6_4() {
 //  pressScanCodeButton(6, 0, 217 /* "🔊" */, 0);
-	handleModTapPress(@modTapHandler6, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler6, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease6_4() {
 //  releaseScanCodeButton(217 /* "🔊" */);
@@ -2503,7 +2500,7 @@ func modTapHandler7(action) {
 }
 func onPress7_1() {
   // pressScanCodeButton(7, 0, 24 /* "U" */, 0);
-	handleModTapPress(@modTapHandler7, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler7, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease7_1() {
   releaseScanCodeButton(24 /* "U" */);
@@ -2518,7 +2515,7 @@ func onRelease7_2() {
 
 func onPress7_4() {
 //  pressScanCodeButton(7, 0, 42 /* "⌫" */, 0);
-	handleModTapPress(@modTapHandler7, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler7, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease7_4() {
 //  releaseScanCodeButton(42 /* "⌫" */);
@@ -2569,7 +2566,7 @@ func modTapHandler8(action) {
 }
 func onPress8_1() {
 //  pressScanCodeButton(8, 0, 12 /* "I" */, 0);
-	handleModTapPress(@modTapHandler8, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler8, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease8_1() {
 //  releaseScanCodeButton(12 /* "I" */);
@@ -2584,7 +2581,7 @@ func onRelease8_2() {
 
 func onPress8_4() {
 //  pressScanCodeButton(8, 0, 82 /* "↑" */, 0);
-	handleModTapPress(@modTapHandler8, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler8, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease8_4() {
 //  releaseScanCodeButton(82 /* "↑" */);
@@ -2646,7 +2643,7 @@ func modTapHandler9(action) {
 }
 func onPress9_1() {
 //  pressScanCodeButton(9, 0, 18 /* "O" */, 0);
-  handleModTapPress(@modTapHandler9, 2, [[00 01 00 00 01 00 00 00]], 0);
+  handleModTapPress(@modTapHandler9, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease9_1() {
 //  releaseScanCodeButton(18 /* "O" */);
@@ -2661,7 +2658,7 @@ func onRelease9_2() {
 
 func onPress9_4() {
   // pressScanCodeButton(9, 0, 76 /* "⌦" */, 0);
-  handleModTapPress(@modTapHandler9, 2, [[00 01 00 00 01 00 00 00]], 0);
+  handleModTapPress(@modTapHandler9, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease9_4() {
   // releaseScanCodeButton(76 /* "⌦" */);
@@ -2723,7 +2720,7 @@ func modTapHandler10(action) {
 }
 func onPress10_1() {
   // pressScanCodeButton(10, 0, 19 /* "P" */, 0);
-	handleModTapPress(@modTapHandler10, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler10, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease10_1() {
   // releaseScanCodeButton(19 /* "P" */);
@@ -2738,7 +2735,7 @@ func onRelease10_2() {
 
 func onPress10_4() {
   // pressScanCodeButton(10, 0, 75 /* "⇞" */, 0);
-	handleModTapPress(@modTapHandler10, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler10, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease10_4() {
   // releaseScanCodeButton(75 /* "⇞" */);
@@ -2788,7 +2785,7 @@ func modTapHandler11(action) {
 }
 func onPress11_1() {
   // pressScanCodeButton(11, 0, 42 /* "⌫" */, 0);
-	handleModTapPress(@modTapHandler11, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler11, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease11_1() {
 //  releaseScanCodeButton(42 /* "⌫" */);
@@ -2805,7 +2802,7 @@ func onRelease11_2() {
 
 func onPress11_4() {
 //  pressScanCodeButton(11, 0, 74 /* "⇱" */, 0);
-  handleModTapPress(@modTapHandler11, 2, [[00 01 00 00 01 00 00 00]], 0);
+  handleModTapPress(@modTapHandler11, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease11_4() {
 //  releaseScanCodeButton(74 /* "⇱" */);
@@ -2959,7 +2956,7 @@ func modTapHandler13(action) {
 }
 func onPress13_1() {
 //  pressScanCodeButton(13, 0, 4 /* "A" */, 0);
-  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease13_1() {
 //  releaseScanCodeButton(4 /* "A" */);
@@ -2976,7 +2973,7 @@ func onRelease13_2() {
 
 func onPress13_3() {
 //  pressScanCodeButton(13, 0, 62 /* "F5" */, 0);
-  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease13_3() {
   // releaseScanCodeButton(62 /* "F5" */);
@@ -2984,7 +2981,7 @@ func onRelease13_3() {
 
 func onPress13_4() {
 //  pressScanCodeButton(13, 0, 227 /* "⌘" */, 0);
-  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler13, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease13_4() {
 //  releaseScanCodeButton(227 /* "⌘" */);
@@ -3053,7 +3050,7 @@ func modTapHandler14(action) {
 }
 func onPress14_1() {
   // pressScanCodeButton(14, 0, 22 /* "S" */, 0);
-	handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease14_1() {
 //  releaseScanCodeButton(22 /* "S" */);
@@ -3070,7 +3067,7 @@ func onRelease14_2() {
 
 func onPress14_3() {
   // pressScanCodeButton(14, 0, 63 /* "F6" */, 0);
-	handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease14_3() {
   // releaseScanCodeButton(63 /* "F6" */);
@@ -3078,7 +3075,7 @@ func onRelease14_3() {
 
 func onPress14_4() {
 //  pressScanCodeButton(14, 0, 226 /* "⌥" */, 0);
-  handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler14, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease14_4() {
 //  releaseScanCodeButton(226 /* "⌥" */);
@@ -3147,7 +3144,7 @@ func modTapHandler15(action) {
 }
 func onPress15_1() {
   // pressScanCodeButton(15, 0, 7 /* "D" */, 0);
-	handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease15_1() {
 //  releaseScanCodeButton(7 /* "D" */);
@@ -3164,7 +3161,7 @@ func onRelease15_2() {
 
 func onPress15_3() {
   // pressScanCodeButton(15, 0, 64 /* "F7" */, 0);
-	handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease15_3() {
   // releaseScanCodeButton(64 /* "F7" */);
@@ -3172,7 +3169,7 @@ func onRelease15_3() {
 
 func onPress15_4() {
 //  pressScanCodeButton(15, 0, 224 /* "⌃" */, 0);
-  handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler15, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease15_4() {
 //  releaseScanCodeButton(224 /* "⌃" */);
@@ -3241,7 +3238,7 @@ func modTapHandler16(action) {
 }
 func onPress16_1() {
 //  pressScanCodeButton(16, 0, 9 /* "F" */, 0);
-  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease16_1() {
 //  releaseScanCodeButton(9 /* "F" */);
@@ -3258,7 +3255,7 @@ func onRelease16_2() {
 
 func onPress16_3() {
   // pressScanCodeButton(16, 0, 65 /* "F8" */, 0);
-  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease16_3() {
   // releaseScanCodeButton(65 /* "F8" */);
@@ -3266,7 +3263,7 @@ func onRelease16_3() {
 
 func onPress16_4() {
 //  pressScanCodeButton(16, 0, 225 /* "⇧" */, 0);
-  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+  handleModTapPress(@modTapHandler16, 1, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease16_4() {
 //  releaseScanCodeButton(225 /* "⇧" */);
@@ -3325,7 +3322,7 @@ func modTapHandler17(action) {
 }
 func onPress17_1() {
 //  pressScanCodeButton(17, 0, 10 /* "G" */, 0);
-	handleModTapPress(@modTapHandler17, 1, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler17, 1, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease17_1() {
 //  releaseScanCodeButton(10 /* "G" */);
@@ -3342,7 +3339,7 @@ func onRelease17_2() {
 
 func onPress17_4() {
 //  pressScanCodeButton(17, 0, 223 /* "🔅" */, 0);
-	handleModTapPress(@modTapHandler17, 1, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler17, 1, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease17_4() {
 //  releaseScanCodeButton(223 /* "🔅" */);
@@ -3385,7 +3382,7 @@ func modTapHandler18(action) {
 }
 func onPress18_1() {
   // pressScanCodeButton(18, 0, 11 /* "H" */, 0);
-	handleModTapPress(@modTapHandler18, 2, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler18, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease18_1() {
   // releaseScanCodeButton(11 /* "H" */);
@@ -3402,7 +3399,7 @@ func onRelease18_2() {
 
 func onPress18_4() {
 //  pressScanCodeButton(18, 0, 218 /* "🔈" */, 0);
-  handleModTapPress(@modTapHandler18, 2, [[00 01 00 00 01 00 00 00]], 0);
+  handleModTapPress(@modTapHandler18, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease18_4() {
 //  releaseScanCodeButton(218 /* "🔈" */);
@@ -3455,7 +3452,7 @@ func modTapHandler19(action) {
 }
 func onPress19_1() {
 //  pressScanCodeButton(19, 0, 13 /* "J" */, 0);
-	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease19_1() {
 //  releaseScanCodeButton(13 /* "J" */);
@@ -3472,7 +3469,7 @@ func onRelease19_2() {
 
 func onPress19_3() {
 //  pressScanCodeButton(19, 0, 225 /* "⇧" */, 0);
-	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease19_3() {
 //  releaseScanCodeButton(225 /* "⇧" */);
@@ -3480,7 +3477,7 @@ func onRelease19_3() {
 
 func onPress19_4() {
 //  pressScanCodeButton(19, 0, 80 /* "←" */, 0);
-	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]], MODTAP_SHIFT_HOLD_TIME);
+	handleModTapPress(@modTapHandler19, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease19_4() {
 //  releaseScanCodeButton(80 /* "←" */);
@@ -3540,7 +3537,7 @@ func modTapHandler20(action) {
 }
 func onPress20_1() {
 //  pressScanCodeButton(20, 0, 14 /* "K" */, 0);
-	handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease20_1() {
   // releaseScanCodeButton(14 /* "K" */);
@@ -3557,7 +3554,7 @@ func onRelease20_2() {
 
 func onPress20_3() {
 //  pressScanCodeButton(20, 0, 224 /* "⌃" */, 0);
-	handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease20_3() {
 //  releaseScanCodeButton(224 /* "⌃" */);
@@ -3565,7 +3562,7 @@ func onRelease20_3() {
 
 func onPress20_4() {
 //  pressScanCodeButton(20, 0, 81 /* "↓" */, 0);
-  handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+  handleModTapPress(@modTapHandler20, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease20_4() {
 //  releaseScanCodeButton(81 /* "↓" */);
@@ -3637,7 +3634,7 @@ func modTapHandler21(action) {
 }
 func onPress21_1() {
   // pressScanCodeButton(21, 0, 15 /* "L" */, 0);
-	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease21_1() {
   // releaseScanCodeButton(15 /* "L" */);
@@ -3654,7 +3651,7 @@ func onRelease21_2() {
 
 func onPress21_3() {
 //  pressScanCodeButton(21, 0, 226 /* "⌥" */, 0);
-	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease21_3() {
   releaseScanCodeButton(226 /* "⌥" */);
@@ -3662,7 +3659,7 @@ func onRelease21_3() {
 
 func onPress21_4() {
 //  pressScanCodeButton(21, 0, 79 /* "→" */, 0);
-	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler21, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease21_4() {
 //  releaseScanCodeButton(79 /* "→" */);
@@ -3734,7 +3731,7 @@ func modTapHandler22(action) {
 }
 func onPress22_1() {
 //  pressScanCodeButton(22, 0, 51 /* ";" */, 0);
-	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease22_1() {
 //  releaseScanCodeButton(51 /* ";" */);
@@ -3751,7 +3748,7 @@ func onRelease22_2() {
 
 func onPress22_3() {
   // pressScanCodeButton(22, 0, 227 /* "⌘" */, 0);
-	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease22_3() {
   // releaseScanCodeButton(227 /* "⌘" */);
@@ -3759,7 +3756,7 @@ func onRelease22_3() {
 
 func onPress22_4() {
   // pressScanCodeButton(22, 0, 78 /* "⇟" */, 0);
-	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]], MODTAP_DEFAULT_HOLD_TIME);
+	handleModTapPress(@modTapHandler22, 2, [[00 03 00 01 01 00 00 00]]);
 }
 func onRelease22_4() {
   // releaseScanCodeButton(78 /* "⇟" */);
@@ -3809,7 +3806,7 @@ func modTapHandler23(action) {
 }
 func onPress23_1() {
   // pressScanCodeButton(23, 0, 52 /* "'" */, 0);
-	handleModTapPress(@modTapHandler23, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler23, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease23_1() {
 //  releaseScanCodeButton(52 /* "'" */);
@@ -3824,7 +3821,7 @@ func onRelease23_2() {
 
 func onPress23_4() {
   // pressScanCodeButton(23, 0, 77 /* "⇲" */, 0);
-	handleModTapPress(@modTapHandler23, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler23, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease23_4() {
   // releaseScanCodeButton(77 /* "⇲" */);
@@ -3917,7 +3914,7 @@ func onPress24_1() {
     timer24_1 = getTime();
   }
 //  pressScanCodeButton(24, 0, 225 /* "⇧" */, 0);
-	handleModTapPress(@modTapHandler24, 3, [[00 02 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler24, 3, [[00 02 00 00 00 00 00 00]]);
 //  pressCount24_1 = getPressCount();
 //  releaseCount24_1 = getReleaseCount();
   checkWordCapsAndCapsLock();
@@ -3981,7 +3978,7 @@ func modTapHandler25(action) {
 }
 func onPress25_1() {
   // pressScanCodeButton(25, 0, 29 /* "Z" */, 0);
-	handleModTapPress(@modTapHandler25, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler25, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease25_1() {
   // releaseScanCodeButton(29 /* "Z" */);
@@ -3996,7 +3993,7 @@ func onRelease25_2() {
 
 func onPress25_3() {
   // pressScanCodeButton(25, 0, 58 /* "F1" */, 0);
-	handleModTapPress(@modTapHandler25, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler25, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease25_3() {
   // releaseScanCodeButton(58 /* "F1" */);
@@ -4035,7 +4032,7 @@ func modTapHandler26(action) {
 }
 func onPress26_1() {
   // pressScanCodeButton(26, 0, 27 /* "X" */, 0);
-	handleModTapPress(@modTapHandler26, 1, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler26, 1, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease26_1() {
   // releaseScanCodeButton(27 /* "X" */);
@@ -4096,7 +4093,7 @@ func modTapHandler27(action) {
 }
 func onPress27_1() {
 //  pressScanCodeButton(27, 0, 6 /* "C" */, 0);
-	handleModTapPress(@modTapHandler27, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler27, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease27_1() {
 //  releaseScanCodeButton(6 /* "C" */);
@@ -4111,7 +4108,7 @@ func onRelease27_2() {
 
 func onPress27_3() {
   // pressScanCodeButton(27, 0, 60 /* "F3" */, 0);
-	handleModTapPress(@modTapHandler27, 1, [[00 01 00 01 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler27, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease27_3() {
   // releaseScanCodeButton(60 /* "F3" */);
@@ -4156,7 +4153,7 @@ func modTapHandler28(action) {
 }
 func onPress28_1() {
 //  pressScanCodeButton(28, 0, 25 /* "V" */, 0);
-  handleModTapPress(@modTapHandler28, 1, [[00 01 00 01 00 00 00 00]], 0);
+  handleModTapPress(@modTapHandler28, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease28_1() {
 //  releaseScanCodeButton(25 /* "V" */);
@@ -4171,7 +4168,7 @@ func onRelease28_2() {
 
 func onPress28_3() {
 //  pressScanCodeButton(28, 0, 61 /* "F4" */, 0);
-  handleModTapPress(@modTapHandler28, 1, [[00 01 00 01 00 00 00 00]], 0);
+  handleModTapPress(@modTapHandler28, 1, [[00 01 00 01 00 00 00 00]]);
 }
 func onRelease28_3() {
 //  releaseScanCodeButton(61 /* "F4" */);
@@ -4201,7 +4198,7 @@ func modTapHandler29(action) {
 }
 func onPress29_1() {
   // pressScanCodeButton(29, 0, 5 /* "B" */, 0);
-	handleModTapPress(@modTapHandler29, 1, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler29, 1, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease29_1() {
 //  releaseScanCodeButton(5 /* "B" */);
@@ -4246,7 +4243,7 @@ func modTapHandler30(action) {
 }
 func onPress30_1() {
 //  pressScanCodeButton(30, 0, 17 /* "N" */, 0);
-  handleModTapPress(@modTapHandler30, 2, [[00 01 00 00 01 00 00 00]], 0);
+  handleModTapPress(@modTapHandler30, 2, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease30_1() {
   // releaseScanCodeButton(17 /* "N" */);
@@ -4292,7 +4289,7 @@ func modTapHandler31(action) {
 }
 func onPress31_1() {
   // pressScanCodeButton(31, 0, 16 /* "M" */, 0);
-	handleModTapPress(@modTapHandler31, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler31, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease31_1() {
   // releaseScanCodeButton(16 /* "M" */);
@@ -4336,7 +4333,7 @@ func modTapHandler32(action) {
 }
 func onPress32_1() {
   // pressScanCodeButton(32, 0, 54 /* "," */, 0);
-	handleModTapPress(@modTapHandler32, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler32, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease32_1() {
 //  releaseScanCodeButton(54 /* "," */);
@@ -4382,7 +4379,7 @@ func modTapHandler33(action) {
 }
 func onPress33_1() {
 //  pressScanCodeButton(33, 0, 55 /* "." */, 0);
-	handleModTapPress(@modTapHandler33, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler33, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease33_1() {
   // releaseScanCodeButton(55 /* "." */);
@@ -4426,7 +4423,7 @@ func modTapHandler34(action) {
 }
 func onPress34_1() {
 //  pressScanCodeButton(34, 0, 56 /* "/" */, 0);
-	handleModTapPress(@modTapHandler34, 2, [[00 01 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler34, 2, [[00 01 00 00 00 00 00 00]]);
 }
 func onRelease34_1() {
 //  releaseScanCodeButton(56 /* "/" */);
@@ -4470,7 +4467,7 @@ func modTapHandler35(action) {
 }
 func onPress35_1() {
 //  pressScanCodeButton(35, 0, 229 /* "⇧" */, 0);
-  handleModTapPress(@modTapHandler35, 3, [[00 02 00 00 00 00 00 00]], 0);
+  handleModTapPress(@modTapHandler35, 3, [[00 02 00 00 00 00 00 00]]);
   checkWordCapsAndCapsLock();
 }
 func onRelease35_1() {
@@ -4569,7 +4566,7 @@ func modTapHandler36(action) {
 }
 func onPress36_1() {
   //pressScanCodeButton(36, 0, 227 /* "⌘" */, 0);
-	handleModTapPress(@modTapHandler36, 3, [[00 02 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler36, 3, [[00 02 00 00 00 00 00 00]]);
 }
 func onRelease36_1() {
 //  releaseScanCodeButton(227 /* "⌘" */);
@@ -4620,7 +4617,7 @@ func modTapHandler37(action) {
 }
 func onPress37_1() {
   // pressScanCodeButton(37, 0, 226 /* "⌥" */, 0);
-	handleModTapPress(@modTapHandler37, 3, [[00 02 00 00 00 00 00 00]], 0);
+	handleModTapPress(@modTapHandler37, 3, [[00 02 00 00 00 00 00 00]]);
   checkWordCapsAndCapsLock();
 }
 func onRelease37_1() {
@@ -4754,7 +4751,7 @@ func onPress38_1() {
 //
 //  }();
   modTapLayerPossibility[4] = 1;
-	handleModTapPress(@modTapHandler38, 3, [[00 23 00 00 00 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+	handleModTapPress(@modTapHandler38, 3, [[00 23 00 00 00 00 00 00]]);
 }
 func onRelease38_1() {
   // stopTimer(104);
@@ -4854,7 +4851,7 @@ func modTapHandler39(action) {
 }
 func onPress39_1() {
   // pressScanCodeButton(39, 0, 44 /* "⎵" */, 0);
-	handleModTapPress(@modTapHandler39, 4, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler39, 4, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease39_1() {
 //  releaseScanCodeButton(44 /* "⎵" */);
@@ -4862,7 +4859,7 @@ func onRelease39_1() {
 
 func onPress39_4() {
 //  pressScanCodeButton(39, 0, 44 /* "⎵" */, 0);
-	handleModTapPress(@modTapHandler39, 4, [[00 01 00 00 01 00 00 00]], 0);
+	handleModTapPress(@modTapHandler39, 4, [[00 01 00 00 01 00 00 00]]);
 }
 func onRelease39_4() {
 //  releaseScanCodeButton(44 /* "⎵" */);
@@ -5018,7 +5015,7 @@ func onPress41_1() {
   // }();
 
   modTapLayerPossibility[3] = 1;
-  handleModTapPress(@modTapHandler41, 5, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  handleModTapPress(@modTapHandler41, 5, [[00 23 00 01 01 00 00 00]]);
 }
 func onRelease41_1() {
   // //
@@ -5061,7 +5058,7 @@ func onRelease41_3() {
 
 func onPress41_4() {
 //  pressScanCodeButton(41, 0, 40 /* "↵" */, 0);
-  handleModTapPress(@modTapHandler41, 6, [[00 23 00 01 01 00 00 00]], MODTAP_LAYER_HOLD_TIME);
+  handleModTapPress(@modTapHandler41, 6, [[00 23 00 01 01 00 00 00]]);
 }
 func onRelease41_4() {
 //  releaseScanCodeButton(40 /* "↵" */);

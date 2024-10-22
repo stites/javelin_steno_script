@@ -22,13 +22,11 @@ const TIMER_ID_MODTAP = 99;
 
 // struct ModTapData {
 //   handler
-//   group
 //   flags
 //   layerFlagList
 //   holdTriggerTime
 // }
 const MODTAP_DATA_OFFSET_HANDLER = 0;
-const MODTAP_DATA_OFFSET_GROUP = 1;
 const MODTAP_DATA_OFFSET_FLAGS = 2;
 const MODTAP_DATA_OFFSET_LAYER_FLAGS_LIST = 3;
 const MODTAP_DATA_OFFSET_HOLD_TRIGGER_TIME = 4;
@@ -38,10 +36,6 @@ const MODTAP_ENTRY_COUNT = 12;
 
 var modTapDataCount;
 var modTapData[MODTAP_DATA_LENGTH * MODTAP_ENTRY_COUNT];
-
-var modTapGuardLeft[4]; // guard for homerow mods
-var modTapGuardRight[4]; // guard for homerow mods
-const MODTAP_GUARD_ACTIVE = 211; // id for guard timer
 
 // 0 = steno
 // 1 = qwerty
@@ -53,20 +47,7 @@ const MODTAP_GUARD_ACTIVE = 211; // id for guard timer
 // 7 = FIDO2
 var modTapLayerPossibility[8];
 
-// Group is used to identify which keys can work together for mods and taps.
-// It is a bitmask to allow keys to belong to more than one group.
-// For this configuration,
-//   0x02: non-homerow
-//   0x04: Shifts + Thumb mods
-//
-//   0x01: homerow-l
-//   0x08: homerow-r
-//   0x09: homerow-l + homerow-r
-//
-//   --------------------------------
-//   0x08: Nav/Space
-//   0x10: Enter / function
-// Pressing a tap-only key from a group will cause other unresolved hold keys to resolve to tap.
+// Pressing a tap-only key will cause other unresolved hold keys to resolve to tap.
 // Flags are a combination of the following flags (in hex), for each layer in the layout:
 //
 //   const MODTAP_FLAG_TAP = 1;
@@ -74,11 +55,10 @@ var modTapLayerPossibility[8];
 //   const MODTAP_FLAG_TAP_AND_HOLD = 3;
 //   const MODTAP_FLAG_LAYER_CHANGE = 32;
 //
-func addModTapEntry(handler, group, flags, layerFlagsList, holdTime) {
+func addModTapEntry(handler, flags, layerFlagsList, holdTime) {
   var base = modTapDataCount * MODTAP_DATA_LENGTH;
   modTapDataCount = modTapDataCount + 1;
   modTapData[base + MODTAP_DATA_OFFSET_HANDLER] = handler;
-  modTapData[base + MODTAP_DATA_OFFSET_GROUP] = group;
   modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags;
   modTapData[base + MODTAP_DATA_OFFSET_LAYER_FLAGS_LIST] = layerFlagsList;
   modTapData[base + MODTAP_DATA_OFFSET_HOLD_TRIGGER_TIME] = getTime() + holdTime;
@@ -150,15 +130,6 @@ func removeModTapIndex(i) {
   }
 }
 
-func areAllModTapEntriesFromGroup(group) var {
-  for (var i = 0; i < modTapDataCount; i = i + 1) {
-    if ((modTapData[i * MODTAP_DATA_LENGTH + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
-      return 0;
-    }
-  }
-  return 1;
-}
-
 func areAllModTapEntriesResolved() var {
   for (var i = 0; i < modTapDataCount; i = i + 1) {
     if ((modTapData[i * MODTAP_DATA_LENGTH + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_UNRESOLVED) {
@@ -169,7 +140,6 @@ func areAllModTapEntriesResolved() var {
 }
 
 func handleModTapPress(handler, group, layerFlagsList, holdTime) {
-  // pressScanCode(7); releaseScanCode(7 /* "D" */); // 1
   // Shouldn't happen, but for safety.
   if (modTapDataCount >= MODTAP_ENTRY_COUNT) {
       return;
@@ -184,27 +154,23 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
 
   if (isInPressAll() && (flags & MODTAP_FLAG_LAYER_CHANGE) == 0) return;
   if (flags == MODTAP_FLAG_TAP) {
-    // pressScanCode(6); releaseScanCode(6 /* "C" */);
     // If group is same as any unresolved mod, then resolve them to tap.
     // If it has already been resolved to hold, release and mark as ignore.
     // This also takes care of the case where there are no entries.
-    if (areAllModTapEntriesFromGroup(group)) {
-      for (var i = 0; i < modTapDataCount;) {
-        var base = i * MODTAP_DATA_LENGTH;
-        var entryHandler = modTapData[base + MODTAP_DATA_OFFSET_HANDLER];
-        var entryFlags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
-        var state = entryFlags & MODTAP_FLAG_STATE;
-        if (state == MODTAP_STATE_RESOLVED_HOLD) {
-          removeModTapIndex(i);
-          entryHandler(MODTAP_HANDLER_RELEASE_HOLD);
-          continue;
-        } else if (state == MODTAP_STATE_UNRESOLVED) {
-          /// I think it's happening here???
-          modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = entryFlags | MODTAP_STATE_RESOLVED_TAP;
-          entryHandler(MODTAP_HANDLER_PRESS_TAP);
-        }
-        i = i + 1;
+    for (var i = 0; i < modTapDataCount;) {
+      var base = i * MODTAP_DATA_LENGTH;
+      var entryHandler = modTapData[base + MODTAP_DATA_OFFSET_HANDLER];
+      var entryFlags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
+      var state = entryFlags & MODTAP_FLAG_STATE;
+      if (state == MODTAP_STATE_RESOLVED_HOLD) {
+        removeModTapIndex(i);
+        entryHandler(MODTAP_HANDLER_RELEASE_HOLD);
+        continue;
+      } else if (state == MODTAP_STATE_UNRESOLVED) {
+        modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = entryFlags | MODTAP_STATE_RESOLVED_TAP;
+        entryHandler(MODTAP_HANDLER_PRESS_TAP);
       }
+      i = i + 1;
     }
 
     // If everything has been resolved, then do the tap immediately
@@ -220,19 +186,7 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
     // If another group has been resolved to hold, then tap immediately.
     for (var i = 0; i < modTapDataCount; i = i + 1) {
       var base = i * MODTAP_DATA_LENGTH;
-      // if (modTapData[base + MODTAP_DATA_OFFSET_GROUP] != 0) {
-      //   // pressScanCode(29); releaseScanCode(29 /* "Z" */);
-      // }
-      // if ((modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
-      //   // pressScanCode(8 ); releaseScanCode(8  /* "E" */);
-      // }
-      // if ((modTapData[base + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_RESOLVED_HOLD) {
-      //   // pressScanCode(9 ); releaseScanCode(9  /* "F" */);
-      // }
-      if (modTapData[base + MODTAP_DATA_OFFSET_GROUP] != 0 &&
-          (modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0 &&
-          (modTapData[base + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_RESOLVED_HOLD) {
-        // pressScanCode(29); releaseScanCode(29 /* "Z" */);
+      if ((modTapData[base + MODTAP_DATA_OFFSET_FLAGS] & MODTAP_FLAG_STATE) == MODTAP_STATE_RESOLVED_HOLD) {
         handler(MODTAP_HANDLER_PRESS_TAP);
         flags = flags | MODTAP_STATE_RESOLVED_TAP;
         break;
@@ -240,7 +194,7 @@ func handleModTapPress(handler, group, layerFlagsList, holdTime) {
     }
   }
 
-  addModTapEntry(handler, group, flags, layerFlagsList, holdTime);
+  addModTapEntry(handler, flags, layerFlagsList, holdTime);
   updateModTapTimer();
 }
 
@@ -254,7 +208,6 @@ func handleModTapRelease(handler) {
   }
 
   var base = i * MODTAP_DATA_LENGTH;
-  var group = modTapData[base + MODTAP_DATA_OFFSET_GROUP];
   var flags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
   var state = flags & MODTAP_FLAG_STATE;
   if (state != MODTAP_STATE_UNRESOLVED) {
@@ -293,11 +246,10 @@ func handleModTapRelease(handler) {
       continue;
     }
 
-    if((modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
-      // pressScanCode(20); releaseScanCode(20 /* "Q" */);
-      updateModTapTimer();
-      return;
-    }
+    // if((modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) == 0) {
+    //   updateModTapTimer();
+    //   return;
+    // }
 
     if (state == MODTAP_STATE_RESOLVED_HOLD) {
       // pressScanCode(26); releaseScanCode(26 /* "W" */);
@@ -354,24 +306,19 @@ func updateModTap() {
     return;
   }
 
-  var group = modTapData[base + MODTAP_DATA_OFFSET_GROUP];
-
   while (i < modTapDataCount) {
-    // Resolve same group to hold, resolve different group to tap.
     base = i * MODTAP_DATA_LENGTH;
     var handler = modTapData[base + MODTAP_DATA_OFFSET_HANDLER];
     var flags = modTapData[base + MODTAP_DATA_OFFSET_FLAGS];
     if ((flags & MODTAP_FLAG_STATE) != MODTAP_STATE_UNRESOLVED) {
       i = i + 1;
-    } else if (modTapData[base + MODTAP_DATA_OFFSET_GROUP] & group) {
+    } else {
       var resolvedFlags = modTapData[base + MODTAP_DATA_OFFSET_LAYER_FLAGS_LIST][resolveLayerIndex()];
       if (resolvedFlags & MODTAP_FLAG_HOLD) {
-        // pressScanCode(54); releaseScanCode(54);  /* , */
         modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_HOLD;
         handler(MODTAP_HANDLER_PRESS_HOLD);
         i = i + 1;
       } else if (resolvedFlags & MODTAP_FLAG_TAP) {
-        // pressScanCode(55); releaseScanCode(55);  /* . */
         modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_TAP;
         handler(MODTAP_HANDLER_PRESS_TAP);
         if (flags & MODTAP_FLAG_RELEASED) {
@@ -381,19 +328,18 @@ func updateModTap() {
           i = i + 1;
         }
       } else {
-        // pressScanCode(56); releaseScanCode(56);  /* / */
         removeModTapIndex(i);
       }
-    } else {
-      modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_TAP;
-      handler(MODTAP_HANDLER_PRESS_TAP);
-      if (flags & MODTAP_FLAG_RELEASED) {
-        // pressScanCode(53); releaseScanCode(53);  /* ` */
-        removeModTapIndex(i);
-        handler(MODTAP_HANDLER_RELEASE_TAP);
-      } else {
-        i = i + 1;
-      }
+    // } else {
+    //   modTapData[base + MODTAP_DATA_OFFSET_FLAGS] = flags | MODTAP_STATE_RESOLVED_TAP;
+    //   handler(MODTAP_HANDLER_PRESS_TAP);
+    //   if (flags & MODTAP_FLAG_RELEASED) {
+    //     // pressScanCode(53); releaseScanCode(53);  /* ` */
+    //     removeModTapIndex(i);
+    //     handler(MODTAP_HANDLER_RELEASE_TAP);
+    //   } else {
+    //     i = i + 1;
+    //   }
     }
   }
 }
@@ -4805,7 +4751,7 @@ func onPress36_5() {
 func onRelease36_5() {
   deactivateGlobal();
   deactivate5();
-  activate1NoRelease();
+  activate1();
   activateGlobal();
   onRelease36_1();
 }
@@ -4868,7 +4814,7 @@ func onRelease37_2() {
   clearResolvedModTap(); // new
   deactivateGlobal();
   deactivate2();
-  activate1NoRelease();
+  activate1();
   activateGlobal();
   onRelease37_1();
 }

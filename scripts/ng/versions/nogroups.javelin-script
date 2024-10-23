@@ -1659,8 +1659,8 @@ func reset_modtap_timers() {
   stopTimer(MODTAP_TIMER_MET_R);
 }
 
-const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
-const LAYERTAP_THRESHOLD = 200; // milliseconds
+const MODTAP_THRESHOLD = 120; // milliseconds for keys that have mod-tap alternates
+const LAYERTAP_THRESHOLD = 120; // milliseconds
 
 // modtap state indicies
 // const MODTAP_STATE_MET_L = 1;

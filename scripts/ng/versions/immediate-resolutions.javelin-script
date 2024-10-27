@@ -123,7 +123,9 @@ func resolve_modtaps() {
   var resolvedLayer = resolveLayerIndex();
   if (resolvedLayer == 1) {
     for (var i = 0; i < 8; i = i + 1) {
-      if (is_tap(i)) {
+      if (is_tap(i)
+        && ((i == MODTAP_STATE_SFT_L) || (i == MODTAP_STATE_SFT_L))
+        ) {
         var timer = modtap_ix2timer(i);
         resolve_now(timer, modtap_ix2handle(i));
       }

@@ -11,6 +11,17 @@ func resolve_now(timer, handle) {
   handle();
 }
 
+const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
+
+const SC_L_CTRL = 0xe0;
+const SC_L_SHIFT = 0xe1;
+const SC_L_ALT = 0xe2;
+const SC_L_META = 0xe3;
+const SC_R_CTRL = 0xe4;
+const SC_R_SHIFT = 0xe5;
+const SC_R_ALT = 0xe6;
+const SC_R_META = 0xe7;
+
 const MODTAP_TIMER_MET_L = 213; // on 13
 const MODTAP_TIMER_ALT_L = 214; // on 14
 const MODTAP_TIMER_CTR_L = 215; // on 15
@@ -31,8 +42,6 @@ func reset_modtap_timers() {
   stopTimer(MODTAP_TIMER_MET_R);
 }
 
-const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
-const LAYERTAP_THRESHOLD = 150; // milliseconds
 
 const MODTAP_STATE_MET_L = 0;
 const MODTAP_STATE_ALT_L = 1;
@@ -72,7 +81,67 @@ func was_pressed(i) var {
 func is_tap(i) var {
   return was_pressed(i) && (! is_held(i));
 }
+
+func modtap_ix2timer(ix) var {
+         if (ix == MODTAP_STATE_MET_L) { return MODTAP_TIMER_MET_L;
+  } else if (ix == MODTAP_STATE_ALT_L) { return MODTAP_TIMER_ALT_L;
+  } else if (ix == MODTAP_STATE_CTR_L) { return MODTAP_TIMER_CTR_L;
+  } else if (ix == MODTAP_STATE_SFT_L) { return MODTAP_TIMER_SFT_L;
+  } else if (ix == MODTAP_STATE_SFT_R) { return MODTAP_TIMER_SFT_R;
+  } else if (ix == MODTAP_STATE_CTR_R) { return MODTAP_TIMER_CTR_R;
+  } else if (ix == MODTAP_STATE_ALT_R) { return MODTAP_TIMER_ALT_R;
+  } else if (ix == MODTAP_STATE_MET_R) { return MODTAP_TIMER_MET_R;
+  } else {
+    return -1;
+  }
+}
+
+func modtap_presshandler_met_l () { pressScanCodeButton(13, 0, SC_L_META, 0);  set_held(MODTAP_STATE_MET_L); }
+func modtap_presshandler_alt_l () { pressScanCodeButton(14, 0, SC_L_ALT, 0);   set_held(MODTAP_STATE_ALT_L); }
+func modtap_presshandler_ctr_l () { pressScanCodeButton(15, 0, SC_L_CTRL, 0);  set_held(MODTAP_STATE_CTR_L); }
+func modtap_presshandler_sft_l () { pressScanCodeButton(16, 0, SC_L_SHIFT, 0); set_held(MODTAP_STATE_SFT_L); }
+func modtap_presshandler_sft_r () { pressScanCodeButton(19, 0, SC_R_SHIFT, 0); set_held(MODTAP_STATE_SFT_R); }
+func modtap_presshandler_ctr_r () { pressScanCodeButton(20, 0, SC_R_CTRL, 0);  set_held(MODTAP_STATE_CTR_R); }
+func modtap_presshandler_alt_r () { pressScanCodeButton(21, 0, SC_R_ALT, 0);   set_held(MODTAP_STATE_ALT_R); }
+func modtap_presshandler_met_r () { pressScanCodeButton(22, 0, SC_R_META, 0);  set_held(MODTAP_STATE_MET_R); }
+
+func modtap_ix2handle(ix) var {
+         if (ix == MODTAP_STATE_MET_L) { return @modtap_presshandler_met_l;
+  } else if (ix == MODTAP_STATE_ALT_L) { return @modtap_presshandler_alt_l;
+  } else if (ix == MODTAP_STATE_CTR_L) { return @modtap_presshandler_ctr_l;
+  } else if (ix == MODTAP_STATE_SFT_L) { return @modtap_presshandler_sft_l;
+  } else if (ix == MODTAP_STATE_SFT_R) { return @modtap_presshandler_sft_r;
+  } else if (ix == MODTAP_STATE_CTR_R) { return @modtap_presshandler_ctr_r;
+  } else if (ix == MODTAP_STATE_ALT_R) { return @modtap_presshandler_alt_r;
+  } else if (ix == MODTAP_STATE_MET_R) { return @modtap_presshandler_met_r;
+  } else {
+    return @noop;
+  }
+}
+
+func resolve_modtaps() {
+  var resolvedLayer = resolveLayerIndex();
+  if (resolvedLayer == 1) {
+    for (var i = 0; i < 8; i = i + 1) {
+      if (is_tap(i)) {
+        var timer = modtap_ix2timer(i);
+        resolve_now(timer, modtap_ix2handle(i));
+      }
+    }
+  }
+}
+func global_resolve_modtaps(buttonIx) {
+  if (((buttonIx > -1) && (buttonIx < 13))
+   || (buttonIx == 17)
+   || (buttonIx == 18)
+   || ((buttonIx > 22) && (buttonIx < 36))
+  ) {
+    resolve_modtaps();
+  }
+}
+
 // -------------------------------------------------------------------------
+const LAYERTAP_THRESHOLD = 150; // milliseconds
 const LAYERTAP_DEFAULT_RETURN = 1; // always return to colemak for now
 
 var pressed_layertap_state[4];
@@ -338,15 +407,6 @@ const SC_MUTE = 0x7f;
 const SC_VOLUME_UP = 0x80;
 const SC_VOLUME_DOWN = 0x81;
 const SC_KP_COMMA = 0x85;
-
-const SC_L_CTRL = 0xe0;
-const SC_L_SHIFT = 0xe1;
-const SC_L_ALT = 0xe2;
-const SC_L_META = 0xe3;
-const SC_R_CTRL = 0xe4;
-const SC_R_SHIFT = 0xe5;
-const SC_R_ALT = 0xe6;
-const SC_R_META = 0xe7;
 
 // From Consumer Page (0x0c)
 const SC_CONSUMER_PLAY = 0xa0;                // UsageId 0xb0
@@ -747,6 +807,7 @@ func globalPress(buttonIndex) {
   lastButtonIndex = buttonIndex;
   updateScreenSaverTimer();
   global_resolve_layertaps(buttonIndex);
+  global_resolve_modtaps(buttonIndex);
   dispatchToLayer(@noop, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @noop);
 }
 
@@ -2256,10 +2317,7 @@ const modifier13_ix = MODTAP_STATE_MET_L;
 
 func pressModtap13() {
   set_pressed(modifier13_ix);
-  startTimer(timer13, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(13, 0, modifier13, 0);
-    set_held(modifier13_ix);
-  });
+  startTimer(timer13, MODTAP_THRESHOLD, 0, @modtap_presshandler_met_l);
 }
 
 func releaseModtap13() {
@@ -2317,10 +2375,7 @@ const modifier14_ix = MODTAP_STATE_ALT_L;
 
 func pressModtap14() {
   set_pressed(modifier14_ix);
-  startTimer(timer14, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(14, 0, modifier14, 0);
-    set_held(modifier14_ix);
-  });
+  startTimer(timer14, MODTAP_THRESHOLD, 0, @modtap_presshandler_alt_l);
 }
 
 func releaseModtap14() {
@@ -2378,10 +2433,7 @@ const modifier15_ix = MODTAP_STATE_CTR_L;
 
 func pressModtap15() {
   set_pressed(modifier15_ix);
-  startTimer(timer15, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(15, 0, modifier15, 0);
-    set_held(modifier15_ix);
-  });
+  startTimer(timer15, MODTAP_THRESHOLD, 0, @modtap_presshandler_ctr_l);
 }
 
 func releaseModtap15() {
@@ -2438,10 +2490,7 @@ const modifier16_ix = MODTAP_STATE_SFT_L;
 
 func pressModtap16() {
   set_pressed(modifier16_ix);
-  startTimer(timer16, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(16, 0, modifier16, 0);
-    set_held(modifier16_ix);
-  });
+  startTimer(timer16, MODTAP_THRESHOLD, 0, @modtap_presshandler_sft_l);
 }
 
 func releaseModtap16() {
@@ -2574,12 +2623,10 @@ const timer19 = MODTAP_TIMER_SFT_R;
 const modifier19 = SC_R_SHIFT;
 const modifier19_ix = MODTAP_STATE_SFT_R;
 
+
 func pressModtap19() {
   set_pressed(modifier19_ix);
-  startTimer(timer19, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(19, 0, modifier19, 0);
-    set_held(modifier19_ix);
-  });
+  startTimer(timer19, MODTAP_THRESHOLD, 0, @modtap_presshandler_sft_r);
 }
 
 func releaseModtap19() {
@@ -2637,12 +2684,10 @@ const timer20 = MODTAP_TIMER_CTR_R;
 const modifier20 = SC_R_CTRL;
 const modifier20_ix = MODTAP_STATE_CTR_R;
 
+
 func pressModtap20() {
   set_pressed(modifier20_ix);
-  startTimer(timer20, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(20, 0, modifier20, 0);
-    set_held(modifier20_ix);
-  });
+  startTimer(timer20, MODTAP_THRESHOLD, 0, @modtap_presshandler_ctr_r);
 }
 
 func releaseModtap20() {
@@ -2705,10 +2750,7 @@ const modifier21_ix = MODTAP_STATE_ALT_R;
 
 func pressModtap21() {
   set_pressed(modifier21_ix);
-  startTimer(timer21, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(21, 0, modifier21, 0);
-    set_held(modifier21_ix);
-  });
+  startTimer(timer21, MODTAP_THRESHOLD, 0, @modtap_presshandler_alt_r);
 }
 
 func releaseModtap21() {
@@ -2772,10 +2814,7 @@ const modifier22_ix = MODTAP_STATE_MET_R;
 
 func pressModtap22() {
   set_pressed(modifier22_ix);
-  startTimer(timer22, MODTAP_THRESHOLD, 0, @{
-    pressScanCodeButton(22, 0, modifier22, 0);
-    set_held(modifier22_ix);
-  });
+  startTimer(timer22, MODTAP_THRESHOLD, 0, @modtap_presshandler_met_r);
 }
 
 func releaseModtap22() {

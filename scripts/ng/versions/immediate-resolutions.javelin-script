@@ -5,6 +5,200 @@
 //     24  25  26  27  28  29    |    30  31  32  33  34  35
 //                   36  37  38  |  39  40  41
 //
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
+func resolve_now(timer, handle) {
+  stopTimer(timer);
+  handle();
+}
+
+const MODTAP_TIMER_MET_L = 213; // on 13
+const MODTAP_TIMER_ALT_L = 214; // on 14
+const MODTAP_TIMER_CTR_L = 215; // on 15
+const MODTAP_TIMER_SFT_L = 216; // on 16
+const MODTAP_TIMER_SFT_R = 219; // on 19
+const MODTAP_TIMER_CTR_R = 220; // on 20
+const MODTAP_TIMER_ALT_R = 221; // on 21
+const MODTAP_TIMER_MET_R = 222; // on 22
+
+func reset_modtap_timers() {
+  stopTimer(MODTAP_TIMER_MET_L);
+  stopTimer(MODTAP_TIMER_ALT_L);
+  stopTimer(MODTAP_TIMER_CTR_L);
+  stopTimer(MODTAP_TIMER_SFT_L);
+  stopTimer(MODTAP_TIMER_SFT_R);
+  stopTimer(MODTAP_TIMER_CTR_R);
+  stopTimer(MODTAP_TIMER_ALT_R);
+  stopTimer(MODTAP_TIMER_MET_R);
+}
+
+const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
+const LAYERTAP_THRESHOLD = 150; // milliseconds
+
+const MODTAP_STATE_MET_L = 0;
+const MODTAP_STATE_ALT_L = 1;
+const MODTAP_STATE_CTR_L = 2;
+const MODTAP_STATE_SFT_L = 3;
+const MODTAP_STATE_SFT_R = 4;
+const MODTAP_STATE_CTR_R = 5;
+const MODTAP_STATE_ALT_R = 6;
+const MODTAP_STATE_MET_R = 7;
+
+var pressed_modtap_state[8];
+var held_modtap_state[8];
+
+func reset_modtap_state() {
+  for (var i; i < 8; i = i + 1) {
+    held_modtap_state[i]    = 0;
+    pressed_modtap_state[i] = 0;
+  }
+  reset_modtap_timers();
+}
+func clear_modtap_state(i) {
+  held_modtap_state[i]    = 0;
+  pressed_modtap_state[i] = 0;
+}
+func set_held(i) {
+  held_modtap_state[i]    = 1;
+}
+func set_pressed(i) {
+  pressed_modtap_state[i] = 1;
+}
+func is_held(i) var {
+  return held_modtap_state[i] == 1;
+}
+func was_pressed(i) var {
+  return pressed_modtap_state[i] == 1;
+}
+func is_tap(i) var {
+  return was_pressed(i) && (! is_held(i));
+}
+// -------------------------------------------------------------------------
+const LAYERTAP_DEFAULT_RETURN = 1; // always return to colemak for now
+
+var pressed_layertap_state[4];
+const LAYERTAP_ID_NUMSYM      = 0;
+const LAYERTAP_ID_FUNC        = 1;
+const LAYERTAP_ID_NAVI        = 2;
+const LAYERTAP_ID_SETTINGS    = 3;
+
+const LAYERTAP_TIMER_NUMSYM   = 237; // on 37
+const LAYERTAP_TIMER_FUNC     = 238; // on 38
+const LAYERTAP_TIMER_NAVI     = 241; // on 41
+const LAYERTAP_TIMER_SETTINGS = 236; // on 36
+
+func layertapto(ix) {
+  // if (ix < 0 || ix > 3) {
+  //   return;
+  // }
+
+  deactivateGlobal();
+  deactivate1();
+  if (ix == LAYERTAP_ID_NUMSYM) {
+    activate2NoRelease();
+  } else if (ix == LAYERTAP_ID_FUNC) {
+    activate3NoRelease();
+  } else if (ix == LAYERTAP_ID_NAVI) {
+    activate4NoRelease();
+  } else if (ix == LAYERTAP_ID_SETTINGS) {
+    activate5NoRelease();
+  }
+  activateGlobal();
+}
+
+func layertapToSettings() {
+ layertapto(LAYERTAP_ID_SETTINGS);
+}
+
+func layertapToNavi() {
+  layertapto(LAYERTAP_ID_NAVI);
+}
+
+func layertapToFunc() {
+  layertapto(LAYERTAP_ID_FUNC);
+}
+
+func layertapToNumSym() {
+  layertapto(LAYERTAP_ID_NUMSYM);
+}
+
+
+func clear_layertap_state(i) {
+  pressed_layertap_state[i] = 0;
+}
+func set_lt_pressed(i) {
+  pressed_layertap_state[i] = 1;
+}
+func is_lt_pressed(i) var {
+  return pressed_layertap_state[i] == 1;
+}
+func reset_layertap_state() {
+  for (var i = 0; i < 4; i = i + 1) {
+    clear_layertap_state(i);
+  }
+  stopTimer(LAYERTAP_TIMER_SETTINGS);
+  stopTimer(LAYERTAP_TIMER_NUMSYM);
+  stopTimer(LAYERTAP_TIMER_FUNC);
+  stopTimer(LAYERTAP_TIMER_NAVI);
+}
+
+func active_layertap() var {
+  for (var i = 0; i < 4; i = i + 1) {
+    if (is_lt_pressed(i)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+func layertap_ix2timer(ix) var {
+  if (ix == LAYERTAP_ID_NUMSYM) {
+    return LAYERTAP_TIMER_NUMSYM;
+  } else if (ix == LAYERTAP_ID_FUNC) {
+    return LAYERTAP_TIMER_FUNC;
+  } else if (ix == LAYERTAP_ID_NAVI) {
+    return LAYERTAP_TIMER_NAVI;
+  } else if (ix == LAYERTAP_ID_SETTINGS) {
+    return LAYERTAP_TIMER_SETTINGS;
+  } else {
+    return -1;
+  }
+}
+
+func layertap_ix2handle(ix) var {
+  if (ix == LAYERTAP_ID_NUMSYM) {
+    return @layertapToNumSym;
+  } else if (ix == LAYERTAP_ID_FUNC) {
+    return @layertapToFunc;
+  } else if (ix == LAYERTAP_ID_NAVI) {
+    return @layertapToNavi;
+  } else if (ix == LAYERTAP_ID_SETTINGS) {
+    return @layertapToSettings;
+  } else {
+    return @noop;
+  }
+}
+
+func resolve_layertaps() {
+  var resolvedLayer = resolveLayerIndex();
+  if (resolvedLayer == 1) {
+    var ix = active_layertap();
+    var timer = layertap_ix2timer(ix);
+    if (timer != -1) {
+      resolve_now(timer, layertap_ix2handle(ix));
+    }
+  }
+}
+
+func global_resolve_layertaps(buttonIx) {
+  if (  (buttonIx != 36)
+     && (buttonIx != 37)
+     && (buttonIx != 38)
+     && (buttonIx != 41)
+  ) {
+    resolve_layertaps();
+  }
+}
+// ---------------------------------------------------------------------------------------------------------------------------------------------------
 /// Generated from javelin-layout file
 // Javelin constants
 const SC_NONE = 0;
@@ -552,6 +746,7 @@ func pressStenoKeyButton(scanCode) {
 func globalPress(buttonIndex) {
   lastButtonIndex = buttonIndex;
   updateScreenSaverTimer();
+  global_resolve_layertaps(buttonIndex);
   dispatchToLayer(@noop, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @rgbButtonPressRandomColor, @noop);
 }
 
@@ -955,43 +1150,6 @@ func drawDisplayOverlay() {
 func redrawDisplayOverlay() {
   // Mark the screen dirty
   drawRect(0, 0, 0, 0, 0);
-}
-
-// Magic Key Scripts
-var magicKey;
-
-func pressMagicKey(buttonIndex) {
-  magicKey = SC_NONE;
-  if (lastScanCodePressed == SC_MINUS
-  || lastScanCodePressed == SC_EQUAL) {
-    magicKey = SC_DOT | KEY_SHIFT;
-  } else if (lastScanCodePressed == (SC_9 | KEY_SHIFT)
-  || lastScanCodePressed == SC_BACKSLASH
-  || lastScanCodePressed == (SC_APOSTROPHE | KEY_SHIFT)) {
-    magicKey = SC_APOSTROPHE | KEY_SHIFT;
-  } else if (SC_1 <= lastScanCodePressed && lastScanCodePressed <= SC_0) {
-    magicKey = SC_COMMA;
-  } else if (SC_KP_1 <= lastScanCodePressed && lastScanCodePressed <= SC_KP_0) {
-    magicKey = SC_COMMA;
-  } else if ((lastScanCodePressed | KEY_SHIFT) == (SC_L_BRACKET | KEY_SHIFT)) {
-    magicKey = SC_ENTER;
-  } else if (lastScanCodePressed == SC_COMMA
-  || lastScanCodePressed == SC_DOT
-  || lastScanCodePressed == SC_KP_DOT) {
-    magicKey = SC_SPACE;
-  }
-
-  if (magicKey & KEY_SHIFT) {
-    pressScanCodeButton(buttonIndex, 0, SC_L_SHIFT, 1);
-  }
-  pressScanCodeButton(buttonIndex, (magicKey & KEY_SHIFT) ? MODIFIER_SHIFT : 0, magicKey & (KEY_SHIFT - 1), 0);
-}
-
-func releaseMagicKey() {
-  releaseScanCodeButton(magicKey & (KEY_SHIFT - 1));
-  if (magicKey & KEY_SHIFT) {
-    releaseScanCodeButton(SC_L_SHIFT);
-  }
 }
 
 // RGB Scripts
@@ -1637,83 +1795,7 @@ func init() {
   activate1();
   activateGlobal();
 }
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
-const MODTAP_TIMER_MET_L = 213; // on 13
-const MODTAP_TIMER_ALT_L = 214; // on 14
-const MODTAP_TIMER_CTR_L = 215; // on 15
-const MODTAP_TIMER_SFT_L = 216; // on 16
-const MODTAP_TIMER_SFT_R = 219; // on 19
-const MODTAP_TIMER_CTR_R = 220; // on 20
-const MODTAP_TIMER_ALT_R = 221; // on 21
-const MODTAP_TIMER_MET_R = 222; // on 22
-
-func reset_modtap_timers() {
-  stopTimer(MODTAP_TIMER_MET_L);
-  stopTimer(MODTAP_TIMER_ALT_L);
-  stopTimer(MODTAP_TIMER_CTR_L);
-  stopTimer(MODTAP_TIMER_SFT_L);
-  stopTimer(MODTAP_TIMER_SFT_R);
-  stopTimer(MODTAP_TIMER_CTR_R);
-  stopTimer(MODTAP_TIMER_ALT_R);
-  stopTimer(MODTAP_TIMER_MET_R);
-}
-
-const MODTAP_THRESHOLD = 150; // milliseconds for keys that have mod-tap alternates
-const LAYERTAP_THRESHOLD = 150; // milliseconds
-
-// modtap state indicies
-// const MODTAP_STATE_MET_L = 1;
-// const MODTAP_STATE_ALT_L = 2;
-// const MODTAP_STATE_CTR_L = 4;
-// const MODTAP_STATE_SFT_L = 8;
-// const MODTAP_STATE_SFT_R = 16;
-// const MODTAP_STATE_CTR_R = 32;
-// const MODTAP_STATE_ALT_R = 64;
-// const MODTAP_STATE_MET_R = 128;
-// // `pressed_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when a press to the relevant key is pressed.
-// // This might turn into a high-resolution guard for chords, but for now it is only used to check the state of the mod-tap.
-// var pressed_modtap_state = 0;
-// // `held_modtap_state` is a bitfield of the relevant mod-tap fields, above, indicating when the corresponding key is holding for the modifier.
-// var held_modtap_state = 0;
-const MODTAP_STATE_MET_L = 0;
-const MODTAP_STATE_ALT_L = 1;
-const MODTAP_STATE_CTR_L = 2;
-const MODTAP_STATE_SFT_L = 3;
-const MODTAP_STATE_SFT_R = 4;
-const MODTAP_STATE_CTR_R = 5;
-const MODTAP_STATE_ALT_R = 6;
-const MODTAP_STATE_MET_R = 7;
-
-var pressed_modtap_state[8];
-var held_modtap_state[8];
-
-func reset_modtap_state() {
-  for (var i; i < 8; i = i + 1) {
-    held_modtap_state[i]    = 0;
-    pressed_modtap_state[i] = 0;
-  }
-  reset_modtap_timers();
-}
-func clear_modtap_state(i) {
-  held_modtap_state[i]    = 0;
-  pressed_modtap_state[i] = 0;
-}
-func set_held(i) {
-  held_modtap_state[i]    = 1;
-}
-func set_pressed(i) {
-  pressed_modtap_state[i] = 1;
-}
-func is_held(i) var {
-  return held_modtap_state[i] == 1;
-}
-func was_pressed(i) var {
-  return pressed_modtap_state[i] == 1;
-}
-func is_tap(i) var {
-  return was_pressed(i) && (! is_held(i));
-}
+// -------------------------------------------------------------------------
 
 // BLE stuff
 const BLE_PAIRING_HOLD_DURATION = 2000;
@@ -1730,25 +1812,7 @@ func bluetoothPairingMode(button) {
   startPairing();
 }
 
-const LAYERTAP_DEFAULT_RETURN = 1; // always return to colemak for now
-const LAYERTAP_ID_NUMSYM      = 2;
-const LAYERTAP_ID_FUNC        = 3;
-const LAYERTAP_ID_NAVI        = 4;
-const LAYERTAP_ID_SETTINGS    = 5;
-
-const LAYERTAP_TIMER_SETTINGS = 236; // on 36
-const LAYERTAP_TIMER_NUMSYM   = 237; // on 37
-const LAYERTAP_TIMER_FUNC     = 238; // on 38
-const LAYERTAP_TIMER_NAVI     = 241; // on 41
-
-func reset_layertap_state() {
-  stopTimer(LAYERTAP_TIMER_SETTINGS);
-  stopTimer(LAYERTAP_TIMER_NUMSYM);
-  stopTimer(LAYERTAP_TIMER_FUNC);
-  stopTimer(LAYERTAP_TIMER_NAVI);
-}
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 
 
 func onPress0() {
@@ -3156,16 +3220,12 @@ const prevlayer36   = LAYERTAP_DEFAULT_RETURN;
 const layertap36    = LAYERTAP_ID_SETTINGS;
 
 func pressLayertap36() {
-  startTimer(timer36, LAYERTAP_THRESHOLD, 0, @{
-    deactivateGlobal();
-    deactivate1NoClear();
-    reset_modtap_state();
-    activate5NoRelease();
-    activateGlobal();
-  });
+  set_lt_pressed(layertap36);
+  startTimer(timer36, LAYERTAP_THRESHOLD, 0, @layertapToSettings);
 }
 
 func releaseLayertap36() {
+  clear_layertap_state(layertap36);
   stopTimer(timer36);
 }
 
@@ -3233,16 +3293,13 @@ const prevlayer37   = LAYERTAP_DEFAULT_RETURN;
 const layertap37    = LAYERTAP_ID_NUMSYM;
 
 func pressLayertap37() {
-  startTimer(timer37, LAYERTAP_THRESHOLD, 0, @{
-    deactivateGlobal();
-    deactivate1NoClear();
-    activate2NoRelease();
-    activateGlobal();
-  });
+  set_lt_pressed(layertap37);
+  startTimer(timer37, LAYERTAP_THRESHOLD, 0, @layertapToNumSym);
 }
 
 func releaseLayertap37() {
   stopTimer(timer37);
+  clear_layertap_state(layertap37);
 }
 
 func onPress37() {
@@ -3308,16 +3365,13 @@ const prevlayer38   = LAYERTAP_DEFAULT_RETURN;
 const layertap38    = LAYERTAP_ID_FUNC;
 
 func pressLayertap38() {
-  startTimer(timer38, LAYERTAP_THRESHOLD, 0, @{
-    deactivateGlobal();
-    deactivate1NoClear();
-    activate3NoRelease();
-    activateGlobal();
-  });
+  set_lt_pressed(layertap38);
+  startTimer(timer38, LAYERTAP_THRESHOLD, 0, @layertapToFunc);
 }
 
 func releaseLayertap38() {
   stopTimer(timer38);
+  clear_layertap_state(layertap38);
 }
 
 func onPress38() {
@@ -3451,16 +3505,13 @@ const prevlayer41   = LAYERTAP_DEFAULT_RETURN;
 const layertap41    = LAYERTAP_ID_NAVI;
 
 func pressLayertap41() {
-  startTimer(timer41, LAYERTAP_THRESHOLD, 0, @{
-    deactivateGlobal();
-    deactivate1();
-    activate4NoRelease();
-    activateGlobal();
-  });
+  set_lt_pressed(layertap41);
+  startTimer(timer41, LAYERTAP_THRESHOLD, 0, @layertapToNavi);
 }
 
 func releaseLayertap41() {
   stopTimer(timer41);
+  clear_layertap_state(layertap41);
 }
 
 func onPress41() {
